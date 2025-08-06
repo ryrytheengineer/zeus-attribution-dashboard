@@ -1,0 +1,49 @@
+GitHub Setup Commands
+=====================
+
+After creating your GitHub repository, run these commands in order:
+
+1. Add the GitHub repository as remote origin:
+   git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
+
+2. Rename the default branch to main (GitHub's default):
+   git branch -M main
+
+3. Push your code to GitHub:
+   git push -u origin main
+
+Replace YOUR_USERNAME with your GitHub username and YOUR_REPO_NAME with your repository name.
+
+Example:
+git remote add origin https://github.com/johndoe/zeus-attribution-dashboard.git
+git branch -M main
+git push -u origin main
+
+Vercel Setup
+============
+
+After your code is on GitHub:
+
+1. Go to https://vercel.com
+2. Sign up/login with your GitHub account
+3. Click "New Project"
+4. Import your GitHub repository
+5. Vercel will automatically detect it's a static site
+6. Click "Deploy"
+
+Your dashboard will be live in seconds!
+
+Automatic Deployments
+====================
+
+Once connected, every time you push changes to GitHub, Vercel will automatically redeploy your site.
+
+Future Updates
+==============
+
+To make changes and deploy:
+1. Edit your files in Cursor
+2. Run: git add .
+3. Run: git commit -m "Your commit message"
+4. Run: git push
+5. Vercel automatically deploys the changes!
