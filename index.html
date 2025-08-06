@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Zeus Attribution Dashboard</title>
+  <title>Zeus Attribution Dashboard - Enterprise Analytics</title>
   <style>
     * {
       margin: 0;
@@ -62,7 +61,7 @@
       width: 100vw;
       padding: clamp(16px, 3vw, 40px);
       display: grid;
-      grid-template-rows: auto auto auto 1fr;
+      grid-template-rows: auto auto auto auto 1fr;
       gap: clamp(20px, 3vw, 32px);
     }
 
@@ -101,6 +100,13 @@
       letter-spacing: -0.02em;
     }
 
+    .header-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 8px;
+    }
+
     .date {
       color: rgba(255, 255, 255, 0.7);
       font-size: clamp(14px, 1.5vw, 18px);
@@ -111,8 +117,30 @@
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
-    /* AI Assistant with enhanced tech styling */
-    .ai-assistant {
+    .live-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #10b981;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .live-dot {
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      animation: pulse-dot 2s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Executive Summary Section */
+    .executive-summary {
       background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(29, 78, 216, 0.1) 100%);
       backdrop-filter: blur(15px);
       border-radius: clamp(16px, 2vw, 24px);
@@ -125,7 +153,7 @@
       overflow: hidden;
     }
 
-    .ai-assistant::before {
+    .executive-summary::before {
       content: '';
       position: absolute;
       top: 0;
@@ -136,19 +164,14 @@
       animation: pulse 2s ease-in-out infinite;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 0.5; }
-      50% { opacity: 1; }
-    }
-
-    .ai-header {
+    .summary-header {
       display: flex;
       align-items: center;
       gap: clamp(12px, 2vw, 16px);
       margin-bottom: clamp(16px, 2vw, 20px);
     }
 
-    .ai-icon {
+    .summary-icon {
       width: clamp(32px, 4vw, 40px);
       height: clamp(32px, 4vw, 40px);
       background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(29, 78, 216, 0.2));
@@ -166,30 +189,52 @@
       50% { box-shadow: 0 0 30px rgba(59, 130, 246, 0.6); }
     }
 
-    .ai-title {
+    .summary-title {
       font-weight: 700;
       font-size: clamp(16px, 2vw, 20px);
       color: #ffffff;
     }
 
-    .ai-content {
+    .summary-content {
       line-height: 1.7;
       margin-bottom: clamp(16px, 2vw, 20px);
       opacity: 0.95;
       font-size: clamp(14px, 1.5vw, 16px);
     }
 
-    .ai-recommendation {
+    .kpi-highlight {
       background: rgba(16, 185, 129, 0.1);
       border-radius: 12px;
       padding: clamp(16px, 2vw, 20px);
       border-left: 3px solid #10b981;
       border: 1px solid rgba(16, 185, 129, 0.2);
       font-size: clamp(14px, 1.5vw, 16px);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
     }
 
-    /* Insights section with enhanced styling */
-    .insights-section {
+    .kpi-item {
+      text-align: center;
+    }
+
+    .kpi-value {
+      font-size: clamp(20px, 3vw, 28px);
+      font-weight: 800;
+      color: #10b981;
+      display: block;
+    }
+
+    .kpi-label {
+      font-size: clamp(12px, 1.2vw, 14px);
+      color: rgba(255, 255, 255, 0.8);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-top: 4px;
+    }
+
+    /* Business Intelligence Section */
+    .business-intelligence {
       background: linear-gradient(135deg, rgba(124, 58, 237, 0.15) 0%, rgba(168, 85, 247, 0.1) 100%);
       backdrop-filter: blur(15px);
       border-radius: clamp(16px, 2vw, 24px);
@@ -202,7 +247,7 @@
       overflow: hidden;
     }
 
-    .insights-section::before {
+    .business-intelligence::before {
       content: '';
       position: absolute;
       top: 0;
@@ -212,14 +257,14 @@
       background: linear-gradient(90deg, transparent, #7c3aed, transparent);
     }
 
-    .insights-header {
+    .bi-header {
       display: flex;
       align-items: center;
       gap: clamp(12px, 2vw, 16px);
       margin-bottom: clamp(16px, 2vw, 20px);
     }
 
-    .insights-icon {
+    .bi-icon {
       width: clamp(32px, 4vw, 40px);
       height: clamp(32px, 4vw, 40px);
       background: linear-gradient(135deg, rgba(124, 58, 237, 0.3), rgba(168, 85, 247, 0.2));
@@ -231,19 +276,19 @@
       border: 1px solid rgba(124, 58, 237, 0.3);
     }
 
-    .insights-title {
+    .bi-title {
       font-weight: 700;
       font-size: clamp(16px, 2vw, 20px);
       color: #ffffff;
     }
 
-    .insights-content {
+    .bi-content {
       line-height: 1.7;
       opacity: 0.95;
       font-size: clamp(14px, 1.5vw, 16px);
     }
 
-    /* Responsive metrics grid */
+    /* Enhanced metrics grid with more KPIs */
     .metrics-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
@@ -289,13 +334,24 @@
       border-color: rgba(124, 58, 237, 0.3);
     }
 
+    .metric-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: clamp(12px, 1.5vw, 16px);
+    }
+
     .metric-label {
       color: rgba(255, 255, 255, 0.7);
       font-size: clamp(12px, 1.2vw, 14px);
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      margin-bottom: clamp(8px, 1vw, 12px);
+    }
+
+    .metric-icon {
+      font-size: clamp(16px, 2vw, 20px);
+      opacity: 0.6;
     }
 
     .metric-value {
@@ -304,6 +360,13 @@
       color: #ffffff;
       margin-bottom: clamp(8px, 1vw, 12px);
       text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .metric-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: clamp(12px, 1.5vw, 16px);
     }
 
     .metric-change {
@@ -322,7 +385,160 @@
       color: #ef4444;
     }
 
-    /* Enhanced cohort section */
+    .metric-benchmark {
+      font-size: clamp(11px, 1.1vw, 13px);
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .progress-bar {
+      background: linear-gradient(90deg, #10b981, #3b82f6);
+      height: 4px;
+      border-radius: 2px;
+      animation: fillBar 1.5s ease-out;
+    }
+
+    @keyframes fillBar {
+      from { width: 0%; }
+      to { width: var(--target-width); }
+    }
+
+    /* Enhanced Chart Sections */
+    .chart-section {
+      background: linear-gradient(135deg, rgba(31, 41, 55, 0.9) 0%, rgba(17, 24, 39, 0.8) 100%);
+      backdrop-filter: blur(20px);
+      border-radius: clamp(16px, 2vw, 24px);
+      padding: clamp(24px, 3vw, 32px);
+      margin-bottom: clamp(24px, 3vw, 32px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chart-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.6), rgba(124, 58, 237, 0.6), transparent);
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: clamp(20px, 2vw, 24px);
+      flex-wrap: wrap;
+      gap: clamp(12px, 2vw, 16px);
+    }
+
+    .chart-title {
+      font-size: clamp(18px, 2.2vw, 24px);
+      font-weight: 700;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: clamp(8px, 1vw, 12px);
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+    }
+
+    .chart-icon {
+      font-size: clamp(20px, 2.5vw, 28px);
+      filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
+    }
+
+    .chart-filters {
+      display: flex;
+      gap: clamp(6px, 1vw, 8px);
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      background: rgba(55, 65, 81, 0.8);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: clamp(6px, 0.8vw, 8px);
+      padding: clamp(6px, 0.8vw, 8px) clamp(12px, 1.5vw, 16px);
+      color: rgba(255, 255, 255, 0.8);
+      font-size: clamp(11px, 1.1vw, 13px);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .filter-btn:hover {
+      background: rgba(75, 85, 99, 0.9);
+      border-color: rgba(59, 130, 246, 0.4);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+      color: #ffffff;
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+      border-color: #3b82f6;
+      color: #ffffff;
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+    }
+
+    .chart-container {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: clamp(12px, 1.5vw, 16px);
+      padding: clamp(16px, 2vw, 20px);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      margin-bottom: clamp(16px, 2vw, 20px);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chart-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(124, 58, 237, 0.05) 0%, transparent 50%);
+      pointer-events: none;
+    }
+
+    .chart-svg {
+      width: 100%;
+      height: auto;
+      position: relative;
+      z-index: 1;
+    }
+
+    .chart-legend {
+      display: flex;
+      justify-content: center;
+      gap: clamp(16px, 2vw, 24px);
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: clamp(6px, 0.8vw, 8px);
+      font-size: clamp(11px, 1.1vw, 13px);
+      color: rgba(255, 255, 255, 0.8);
+      font-weight: 500;
+    }
+
+    .legend-color {
+      width: clamp(10px, 1.2vw, 12px);
+      height: clamp(10px, 1.2vw, 12px);
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    /* Cohort Analysis Table */
     .cohort-section {
       background: linear-gradient(135deg, rgba(31, 41, 55, 0.9) 0%, rgba(17, 24, 39, 0.8) 100%);
       backdrop-filter: blur(20px);
@@ -466,228 +682,6 @@
       border: 1px solid rgba(239, 68, 68, 0.3);
     }
 
-    /* Ultra responsive breakpoints */
-    @media (max-width: 1200px) {
-      .metrics-grid {
-        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      }
-    }
-
-    @media (max-width: 768px) {
-      .dashboard {
-        padding: clamp(12px, 2vw, 20px);
-        gap: clamp(16px, 2vw, 24px);
-      }
-      
-      .header {
-        flex-direction: column;
-        text-align: center;
-        gap: clamp(12px, 2vw, 16px);
-      }
-      
-      .metrics-grid {
-        grid-template-columns: 1fr;
-        gap: clamp(12px, 2vw, 16px);
-      }
-      
-      .cohort-header {
-        flex-direction: column;
-        align-items: stretch;
-        text-align: center;
-      }
-      
-      .cohort-controls {
-        justify-content: center;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .dashboard {
-        padding: clamp(8px, 2vw, 16px);
-      }
-      
-      .ai-assistant,
-      .insights-section,
-      .cohort-section {
-        padding: clamp(16px, 3vw, 24px);
-      }
-      
-      .table-container {
-        margin: 0 -clamp(8px, 2vw, 16px);
-        border-radius: 0;
-        border-left: none;
-        border-right: none;
-      }
-    }
-
-    /* Custom scrollbar */
-    ::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.6), rgba(124, 58, 237, 0.6));
-      border-radius: 4px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(124, 58, 237, 0.8));
-    }
-
-    /* Enhanced Chart Sections */
-    .chart-section {
-      background: linear-gradient(135deg, rgba(31, 41, 55, 0.9) 0%, rgba(17, 24, 39, 0.8) 100%);
-      backdrop-filter: blur(20px);
-      border-radius: clamp(16px, 2vw, 24px);
-      padding: clamp(24px, 3vw, 32px);
-      margin-bottom: clamp(24px, 3vw, 32px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .chart-section::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.6), rgba(124, 58, 237, 0.6), transparent);
-    }
-
-    .chart-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: clamp(20px, 2vw, 24px);
-      flex-wrap: wrap;
-      gap: clamp(12px, 2vw, 16px);
-    }
-
-    .chart-title {
-      font-size: clamp(18px, 2.2vw, 24px);
-      font-weight: 700;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      gap: clamp(8px, 1vw, 12px);
-      text-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
-    }
-
-    .chart-icon {
-      font-size: clamp(20px, 2.5vw, 28px);
-      filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.5));
-    }
-
-    .chart-filters {
-      display: flex;
-      gap: clamp(6px, 1vw, 8px);
-      flex-wrap: wrap;
-    }
-
-    .filter-btn {
-      background: rgba(55, 65, 81, 0.8);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: clamp(6px, 0.8vw, 8px);
-      padding: clamp(6px, 0.8vw, 8px) clamp(12px, 1.5vw, 16px);
-      color: rgba(255, 255, 255, 0.8);
-      font-size: clamp(11px, 1.1vw, 13px);
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .filter-btn:hover {
-      background: rgba(75, 85, 99, 0.9);
-      border-color: rgba(59, 130, 246, 0.4);
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
-      color: #ffffff;
-    }
-
-    .filter-btn.active {
-      background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-      border-color: #3b82f6;
-      color: #ffffff;
-      box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
-    }
-
-    .chart-container {
-      background: rgba(0, 0, 0, 0.2);
-      border-radius: clamp(12px, 1.5vw, 16px);
-      padding: clamp(16px, 2vw, 20px);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      margin-bottom: clamp(16px, 2vw, 20px);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .chart-container::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: 
-        radial-gradient(circle at 20% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(124, 58, 237, 0.05) 0%, transparent 50%);
-      pointer-events: none;
-    }
-
-    .chart-svg {
-      width: 100%;
-      height: auto;
-      position: relative;
-      z-index: 1;
-    }
-
-    .chart-legend {
-      display: flex;
-      justify-content: center;
-      gap: clamp(16px, 2vw, 24px);
-      flex-wrap: wrap;
-    }
-
-    .legend-item {
-      display: flex;
-      align-items: center;
-      gap: clamp(6px, 0.8vw, 8px);
-      font-size: clamp(11px, 1.1vw, 13px);
-      color: rgba(255, 255, 255, 0.8);
-      font-weight: 500;
-    }
-
-    .legend-color {
-      width: clamp(10px, 1.2vw, 12px);
-      height: clamp(10px, 1.2vw, 12px);
-      border-radius: 2px;
-      flex-shrink: 0;
-    }
-
-    /* Loading animation for dynamic content */
-    @keyframes shimmer {
-      0% { background-position: -200px 0; }
-      100% { background-position: calc(200px + 100%) 0; }
-    }
-
-    .loading {
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-      background-size: 200px 100%;
-      animation: shimmer 1.5s infinite;
-    }
-
     /* Scroll Animations */
     .fade-in {
       opacity: 0;
@@ -751,19 +745,6 @@
 
     .counter {
       animation: countUp 0.8s ease-out;
-    }
-
-    /* Progress Bar Animation */
-    @keyframes fillBar {
-      from { width: 0%; }
-      to { width: var(--target-width); }
-    }
-
-    .progress-bar {
-      background: linear-gradient(90deg, #10b981, #3b82f6);
-      height: 4px;
-      border-radius: 2px;
-      animation: fillBar 1.5s ease-out;
     }
 
     /* Notification Toast */
@@ -837,284 +818,279 @@
     .parallax {
       transform: translateY(var(--scroll-y, 0));
     }
+
+    /* Ultra responsive breakpoints */
+    @media (max-width: 1200px) {
+      .metrics-grid {
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        padding: clamp(12px, 2vw, 20px);
+        gap: clamp(16px, 2vw, 24px);
+      }
+      
+      .header {
+        flex-direction: column;
+        text-align: center;
+        gap: clamp(12px, 2vw, 16px);
+      }
+      
+      .metrics-grid {
+        grid-template-columns: 1fr;
+        gap: clamp(12px, 2vw, 16px);
+      }
+      
+      .cohort-header {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+      }
+      
+      .cohort-controls {
+        justify-content: center;
+      }
+
+      .kpi-highlight {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .dashboard {
+        padding: clamp(8px, 2vw, 16px);
+      }
+      
+      .executive-summary,
+      .business-intelligence,
+      .chart-section,
+      .cohort-section {
+        padding: clamp(16px, 3vw, 24px);
+      }
+      
+      .table-container {
+        margin: 0 -clamp(8px, 2vw, 16px);
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+      }
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.6), rgba(124, 58, 237, 0.6));
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(124, 58, 237, 0.8));
+    }
+
+    /* Loading animation for dynamic content */
+    @keyframes shimmer {
+      0% { background-position: -200px 0; }
+      100% { background-position: calc(200px + 100%) 0; }
+    }
+
+    .loading {
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+      background-size: 200px 100%;
+      animation: shimmer 1.5s infinite;
+    }
   </style>
 </head>
 <body>
   <div class="dashboard">
     <div class="header fade-in">
-      <h1>Zeus Attribution Model</h1>
-      <div class="date">August 5, 2025</div>
-    </div>
-
-    <div class="ai-assistant slide-in-left">
-      <div class="ai-header">
-        <div class="ai-icon">🤖</div>
-        <div class="ai-title">Zeus AI Assistant</div>
-      </div>
-      <div class="ai-content">
-        Based on July's app cohort data, females aged 25-34 are showing the highest 6-month retention conversion success rate at <span class="counter" data-target="73.2">0</span>%. This demographic has the strongest retention curve and lowest religion indicators.
-      </div>
-      <div class="ai-recommendation">
-        <strong>Recommendation:</strong> 3x ad spend on Meta campaign "SF_Female_25_34_Web-max" (current spend: $<span class="counter" data-target="1647">0</span>/day → target: $<span class="counter" data-target="5641">0</span>/day) to maximize high-intent conversions during Q3 peak season.
+      <h1>Zeus Attribution Dashboard</h1>
+      <div class="header-info">
+        <div class="date">December 15, 2024</div>
+        <div class="live-indicator">
+          <div class="live-dot"></div>
+          LIVE DATA
+        </div>
       </div>
     </div>
 
-    <div class="insights-section slide-in-right">
-      <div class="insights-header">
-        <div class="insights-icon">💡</div>
-        <div class="insights-title">Zeus Model Insights</div>
+    <div class="executive-summary slide-in-left">
+      <div class="summary-header">
+        <div class="summary-icon">🎯</div>
+        <div class="summary-title">Executive Summary - Q4 2024 Performance</div>
       </div>
-      <div class="insights-content">
-        The Zeus attribution Model identified seven performance patterns showing <span class="counter" data-target="164">0</span>% ROI improvement when focusing ad spend on high-performing demographics. Current optimization suggests reallocating <span class="counter" data-target="73">0</span>% of budget from low-performing segments to maximize total conversion volume by an estimated <span class="counter" data-target="47">0</span>%.
+      <div class="summary-content">
+        Zeus Attribution Model achieved <span class="counter" data-target="184">0</span>% ROI improvement this quarter, with our vaping cessation app reaching <span class="counter" data-target="2.4">0</span>M active users. K-factor of <span class="counter" data-target="0.73">0</span> indicates strong viral growth, while our 90-day quit success rate of <span class="counter" data-target="68.2">0</span>% significantly outperforms industry benchmarks.
+      </div>
+      <div class="kpi-highlight">
+        <div class="kpi-item">
+          <span class="kpi-value counter" data-target="0.73">0.00</span>
+          <div class="kpi-label">K-Factor</div>
+        </div>
+        <div class="kpi-item">
+          <span class="kpi-value">$<span class="counter" data-target="127.50">0</span></span>
+          <div class="kpi-label">LTV</div>
+        </div>
+        <div class="kpi-item">
+          <span class="kpi-value">$<span class="counter" data-target="31.20">0</span></span>
+          <div class="kpi-label">CAC</div>
+        </div>
+        <div class="kpi-item">
+          <span class="kpi-value counter" data-target="4.09">0.00</span>
+          <div class="kpi-label">LTV:CAC Ratio</div>
+        </div>
+        <div class="kpi-item">
+          <span class="kpi-value counter" data-target="68.2">0</span>%</span>
+          <div class="kpi-label">90-Day Quit Rate</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="business-intelligence slide-in-right">
+      <div class="bi-header">
+        <div class="bi-icon">🧠</div>
+        <div class="bi-title">AI-Powered Business Intelligence</div>
+      </div>
+      <div class="bi-content">
+        Advanced attribution modeling reveals that females aged 25-34 demonstrate the highest viral coefficient (<span class="counter" data-target="0.89">0</span>) and longest engagement cycles. Premium subscribers show <span class="counter" data-target="312">0</span>% higher referral rates, suggesting freemium-to-premium conversion significantly amplifies organic growth. Recommend reallocating <span class="counter" data-target="40">0</span>% of UA budget toward high-LTV demographic segments.
       </div>
     </div>
 
     <div class="metrics-grid fade-in">
-      <div class="metric-card" data-metric="installs">
-        <div class="metric-label">APP INSTALLS</div>
-        <div class="metric-value counter" data-target="128034">0</div>
-        <div class="metric-change positive">+12.3% vs last month</div>
+      <div class="metric-card" data-metric="mau">
+        <div class="metric-header">
+          <div class="metric-label">Monthly Active Users</div>
+          <div class="metric-icon">👥</div>
+        </div>
+        <div class="metric-value counter" data-target="2400000">0</div>
+        <div class="metric-details">
+          <div class="metric-change positive">+18.7% vs last month</div>
+          <div class="metric-benchmark">Target: 2.5M</div>
+        </div>
+        <div class="progress-bar" style="--target-width: 96%;"></div>
+      </div>
+      
+      <div class="metric-card" data-metric="k-factor">
+        <div class="metric-header">
+          <div class="metric-label">K-Factor (Viral Coefficient)</div>
+          <div class="metric-icon">🚀</div>
+        </div>
+        <div class="metric-value"><span class="counter" data-target="0.73">0.00</span></div>
+        <div class="metric-details">
+          <div class="metric-change positive">+0.12 vs last month</div>
+          <div class="metric-benchmark">Industry avg: 0.35</div>
+        </div>
+        <div class="progress-bar" style="--target-width: 73%;"></div>
+      </div>
+      
+      <div class="metric-card" data-metric="ltv">
+        <div class="metric-header">
+          <div class="metric-label">Customer Lifetime Value</div>
+          <div class="metric-icon">💰</div>
+        </div>
+        <div class="metric-value">$<span class="counter" data-target="127.50">0</span></div>
+        <div class="metric-details">
+          <div class="metric-change positive">+$14.20 vs last month</div>
+          <div class="metric-benchmark">Target: $150</div>
+        </div>
         <div class="progress-bar" style="--target-width: 85%;"></div>
       </div>
       
-      <div class="metric-card" data-metric="spend">
-        <div class="metric-label">AD SPEND</div>
-        <div class="metric-value">$<span class="counter" data-target="342580">0</span></div>
-        <div class="metric-change positive">+8.7% vs last month</div>
-        <div class="progress-bar" style="--target-width: 72%;"></div>
+      <div class="metric-card" data-metric="cac">
+        <div class="metric-header">
+          <div class="metric-label">Customer Acquisition Cost</div>
+          <div class="metric-icon">📊</div>
+        </div>
+        <div class="metric-value">$<span class="counter" data-target="31.20">0</span></div>
+        <div class="metric-details">
+          <div class="metric-change negative">+$2.40 vs last month</div>
+          <div class="metric-benchmark">Target: <$25</div>
+        </div>
+        <div class="progress-bar" style="--target-width: 62%;"></div>
       </div>
       
-      <div class="metric-card" data-metric="orders">
-        <div class="metric-label">ORDERS</div>
-        <div class="metric-value counter" data-target="58247">0</div>
-        <div class="metric-change positive">+15.2% vs last month</div>
-        <div class="progress-bar" style="--target-width: 92%;"></div>
+      <div class="metric-card" data-metric="quit-rate">
+        <div class="metric-header">
+          <div class="metric-label">90-Day Quit Success Rate</div>
+          <div class="metric-icon">🎯</div>
+        </div>
+        <div class="metric-value"><span class="counter" data-target="68.2">0</span>%</div>
+        <div class="metric-details">
+          <div class="metric-change positive">+3.8% vs last month</div>
+          <div class="metric-benchmark">Industry avg: 23%</div>
+        </div>
+        <div class="progress-bar" style="--target-width: 91%;"></div>
       </div>
       
+      <div class="metric-card" data-metric="arpu">
+        <div class="metric-header">
+          <div class="metric-label">Average Revenue Per User</div>
+          <div class="metric-icon">💵</div>
+        </div>
+        <div class="metric-value">$<span class="counter" data-target="12.84">0</span></div>
+        <div class="metric-details">
+          <div class="metric-change positive">+$1.20 vs last month</div>
+          <div class="metric-benchmark">Target: $15</div>
+        </div>
+        <div class="progress-bar" style="--target-width: 86%;"></div>
+      </div>
+
+      <div class="metric-card" data-metric="retention">
+        <div class="metric-header">
+          <div class="metric-label">Day 30 Retention Rate</div>
+          <div class="metric-icon">🔄</div>
+        </div>
+        <div class="metric-value"><span class="counter" data-target="42.6">0</span>%</div>
+        <div class="metric-details">
+          <div class="metric-change positive">+2.1% vs last month</div>
+          <div class="metric-benchmark">Industry avg: 18%</div>
+        </div>
+        <div class="progress-bar" style="--target-width: 85%;"></div>
+      </div>
+
+      <div class="metric-card" data-metric="nps">
+        <div class="metric-header">
+          <div class="metric-label">Net Promoter Score</div>
+          <div class="metric-icon">⭐</div>
+        </div>
+        <div class="metric-value counter" data-target="74">0</div>
+        <div class="metric-details">
+          <div class="metric-change positive">+6 vs last month</div>
+          <div class="metric-benchmark">Excellent: >70</div>
+        </div>
+        <div class="progress-bar" style="--target-width: 93%;"></div>
+      </div>
+
       <div class="metric-card" data-metric="conversion">
-        <div class="metric-label">CONVERSION RATE</div>
-        <div class="metric-value"><span class="counter" data-target="3.94">0</span>%</div>
-        <div class="metric-change negative">-0.2% vs last month</div>
-        <div class="progress-bar" style="--target-width: 65%;"></div>
-      </div>
-      
-      <div class="metric-card" data-metric="cpi">
-        <div class="metric-label">COST PER INSTALL</div>
-        <div class="metric-value">$<span class="counter" data-target="1.32">0</span></div>
-        <div class="metric-change negative">-3.1% vs last month</div>
-        <div class="progress-bar" style="--target-width: 58%;"></div>
-      </div>
-      
-      <div class="metric-card" data-metric="cpm">
-        <div class="metric-label">AVG CPM</div>
-        <div class="metric-value">$<span class="counter" data-target="5.18">0</span></div>
-        <div class="metric-change positive">+2.1% vs last month</div>
-        <div class="progress-bar" style="--target-width: 78%;"></div>
+        <div class="metric-header">
+          <div class="metric-label">Free-to-Premium Conversion</div>
+          <div class="metric-icon">📈</div>
+        </div>
+        <div class="metric-value"><span class="counter" data-target="8.4">0</span>%</div>
+        <div class="metric-details">
+          <div class="metric-change positive">+0.7% vs last month</div>
+          <div class="metric-benchmark">Target: 10%</div>
+        </div>
+        <div class="progress-bar" style="--target-width: 84%;"></div>
       </div>
     </div>
 
     <!-- Enhanced Chart Sections -->
-    <div class="chart-section scale-in interactive-chart" data-chart="cohort">
+    <div class="chart-section scale-in interactive-chart" data-chart="viral-growth">
       <div class="chart-header">
         <div class="chart-title">
-          <span class="chart-icon">📊</span>
-          Vaping Cessation Cohort Analysis - Quit Journey Progression
-        </div>
-        <div class="chart-filters">
-          <button class="filter-btn active" data-filter="all">All Cohorts</button>
-          <button class="filter-btn" data-filter="6m">6M</button>
-          <button class="filter-btn" data-filter="12m">12M</button>
-        </div>
-      </div>
-      <div class="chart-container">
-        <svg class="chart-svg" viewBox="0 0 900 320">
-          <defs>
-            <linearGradient id="attemptGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
-            </linearGradient>
-            <linearGradient id="relapseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#dc2626;stop-opacity:1" />
-            </linearGradient>
-            <linearGradient id="quitGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
-              <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
-            </linearGradient>
-          </defs>
-          
-          <!-- Y-axis labels -->
-          <text x="40" y="50" text-anchor="end" fill="rgba(255,255,255,0.7)" font-size="10">100%</text>
-          <text x="40" y="110" text-anchor="end" fill="rgba(255,255,255,0.7)" font-size="10">75%</text>
-          <text x="40" y="170" text-anchor="end" fill="rgba(255,255,255,0.7)" font-size="10">50%</text>
-          <text x="40" y="230" text-anchor="end" fill="rgba(255,255,255,0.7)" font-size="10">25%</text>
-          <text x="40" y="290" text-anchor="end" fill="rgba(255,255,255,0.7)" font-size="10">0%</text>
-          
-          <!-- Grid lines -->
-          <g stroke="rgba(255,255,255,0.1)" stroke-width="0.5" opacity="0.5">
-            <line x1="50" y1="50" x2="850" y2="50" />
-            <line x1="50" y1="110" x2="850" y2="110" />
-            <line x1="50" y1="170" x2="850" y2="170" />
-            <line x1="50" y1="230" x2="850" y2="230" />
-            <line x1="50" y1="290" x2="850" y2="290" />
-          </g>
-          
-          <!-- Cohort bars -->
-          <rect x="60" y="50" width="18" height="200" fill="url(#attemptGrad)" />
-          <rect x="60" y="150" width="18" height="100" fill="url(#relapseGrad)" />
-          <rect x="60" y="240" width="18" height="30" fill="url(#quitGrad)" />
-          
-          <rect x="82" y="50" width="18" height="190" fill="url(#attemptGrad)" />
-          <rect x="82" y="145" width="18" height="95" fill="url(#relapseGrad)" />
-          <rect x="82" y="235" width="18" height="35" fill="url(#quitGrad)" />
-          
-          <rect x="104" y="50" width="18" height="180" fill="url(#attemptGrad)" />
-          <rect x="104" y="140" width="18" height="90" fill="url(#relapseGrad)" />
-          <rect x="104" y="225" width="18" height="45" fill="url(#quitGrad)" />
-          
-          <rect x="126" y="50" width="18" height="170" fill="url(#attemptGrad)" />
-          <rect x="126" y="135" width="18" height="85" fill="url(#relapseGrad)" />
-          <rect x="126" y="215" width="18" height="55" fill="url(#quitGrad)" />
-          
-          <rect x="148" y="50" width="18" height="160" fill="url(#attemptGrad)" />
-          <rect x="148" y="130" width="18" height="80" fill="url(#relapseGrad)" />
-          <rect x="148" y="205" width="18" height="65" fill="url(#quitGrad)" />
-          
-          <rect x="334" y="50" width="18" height="85" fill="url(#attemptGrad)" />
-          <rect x="334" y="90" width="18" height="45" fill="url(#relapseGrad)" />
-          <rect x="334" y="130" width="18" height="140" fill="url(#quitGrad)" />
-          
-          <rect x="750" y="50" width="18" height="60" fill="url(#attemptGrad)" />
-          <rect x="750" y="65" width="18" height="30" fill="url(#relapseGrad)" />
-          <rect x="750" y="90" width="18" height="180" fill="url(#quitGrad)" />
-          
-          <!-- X-axis labels -->
-          <text x="69" y="305" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" transform="rotate(-45 69 305)">Jan23</text>
-          <text x="91" y="305" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" transform="rotate(-45 91 305)">Feb23</text>
-          <text x="113" y="305" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" transform="rotate(-45 113 305)">Mar23</text>
-          <text x="343" y="305" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" transform="rotate(-45 343 305)">Jan24</text>
-          <text x="759" y="305" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="8" transform="rotate(-45 759 305)">Jul25</text>
-          
-          <!-- Success line -->
-          <line x1="50" y1="140" x2="850" y2="140" stroke="#10b981" stroke-width="2" stroke-dasharray="5,5" opacity="0.8" />
-          <text x="55" y="135" fill="#10b981" font-size="10" font-weight="600">70% success rate</text>
-        </svg>
-      </div>
-      <div class="chart-legend">
-        <div class="legend-item">
-          <div class="legend-color" style="background: #f59e0b;"></div>
-          <span>Attempted Quit</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color" style="background: #ef4444;"></div>
-          <span>Relapsed</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color" style="background: #10b981;"></div>
-          <span>Successfully Quit</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="chart-section scale-in interactive-chart" data-chart="timeline">
-      <div class="chart-header">
-        <div class="chart-title">
-          <span class="chart-icon">💰</span>
-          Cessation Timeline vs Cost Per Quit Analysis
-        </div>
-        <div class="chart-filters">
-          <button class="filter-btn active" data-filter="3m">3M</button>
-          <button class="filter-btn" data-filter="6m">6M</button>
-          <button class="filter-btn" data-filter="12m">12M</button>
-        </div>
-      </div>
-      <div class="chart-container">
-        <svg class="chart-svg" viewBox="0 0 800 300">
-          <defs>
-            <linearGradient id="bubbleGrad1" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.8" />
-              <stop offset="100%" style="stop-color:#059669;stop-opacity:0.6" />
-            </linearGradient>
-            <linearGradient id="bubbleGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.8" />
-              <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.6" />
-            </linearGradient>
-            <linearGradient id="bubbleGrad3" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#ef4444;stop-opacity:0.8" />
-              <stop offset="100%" style="stop-color:#dc2626;stop-opacity:0.6" />
-            </linearGradient>
-          </defs>
-          
-          <!-- Grid lines -->
-          <g stroke="rgba(255,255,255,0.1)" stroke-width="1" opacity="0.5">
-            <line x1="100" y1="50" x2="100" y2="250" />
-            <line x1="250" y1="50" x2="250" y2="250" />
-            <line x1="400" y1="50" x2="400" y2="250" />
-            <line x1="550" y1="50" x2="550" y2="250" />
-            <line x1="700" y1="50" x2="700" y2="250" />
-            <line x1="80" y1="75" x2="720" y2="75" />
-            <line x1="80" y1="125" x2="720" y2="125" />
-            <line x1="80" y1="175" x2="720" y2="175" />
-            <line x1="80" y1="225" x2="720" y2="225" />
-          </g>
-          
-          <!-- Bubble chart points -->
-          <circle cx="150" cy="85" r="25" fill="url(#bubbleGrad1)" />
-          <text x="150" y="90" text-anchor="middle" fill="white" font-size="10" font-weight="600">F 25-34</text>
-          
-          <circle cx="200" cy="110" r="22" fill="url(#bubbleGrad1)" />
-          <text x="200" y="115" text-anchor="middle" fill="white" font-size="9" font-weight="600">M 25-34</text>
-          
-          <circle cx="320" cy="150" r="20" fill="url(#bubbleGrad2)" />
-          <text x="320" y="155" text-anchor="middle" fill="white" font-size="9" font-weight="600">F 18-24</text>
-          
-          <circle cx="380" cy="180" r="18" fill="url(#bubbleGrad2)" />
-          <text x="380" y="185" text-anchor="middle" fill="white" font-size="8" font-weight="600">M 18-24</text>
-          
-          <circle cx="500" cy="140" r="16" fill="url(#bubbleGrad3)" />
-          <text x="500" y="145" text-anchor="middle" fill="white" font-size="8" font-weight="600">F 35-44</text>
-          
-          <circle cx="580" cy="200" r="15" fill="url(#bubbleGrad3)" />
-          <text x="580" y="205" text-anchor="middle" fill="white" font-size="8" font-weight="600">M 35-44</text>
-          
-          <!-- Axes labels -->
-          <text x="400" y="285" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="12">Average Days to Quit</text>
-          <text x="30" y="150" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="12" transform="rotate(-90 30 150)">Cost Per Quit ($)</text>
-          
-          <!-- Scale indicators -->
-          <text x="100" y="275" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">30</text>
-          <text x="250" y="275" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">60</text>
-          <text x="400" y="275" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">90</text>
-          <text x="550" y="275" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">120</text>
-          <text x="700" y="275" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">150</text>
-          
-          <text x="70" y="230" text-anchor="end" fill="rgba(255,255,255,0.6)" font-size="10">$50</text>
-          <text x="70" y="180" text-anchor="end" fill="rgba(255,255,255,0.6)" font-size="10">$100</text>
-          <text x="70" y="130" text-anchor="end" fill="rgba(255,255,255,0.6)" font-size="10">$150</text>
-          <text x="70" y="80" text-anchor="end" fill="rgba(255,255,255,0.6)" font-size="10">$200</text>
-        </svg>
-      </div>
-      <div class="chart-legend">
-        <div class="legend-item">
-          <div class="legend-color" style="background: #10b981; border-radius: 50%;"></div>
-          <span>High Success (70%+ quit rate)</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color" style="background: #f59e0b; border-radius: 50%;"></div>
-          <span>Moderate Success (50-70% quit rate)</span>
-        </div>
-        <div class="legend-item">
-          <div class="legend-color" style="background: #ef4444; border-radius: 50%;"></div>
-          <span>Lower Success (<50% quit rate)</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="chart-section scale-in interactive-chart" data-chart="trends">
-      <div class="chart-header">
-        <div class="chart-title">
-          <span class="chart-icon">📈</span>
-          Performance by Demographic Trends
+          <span class="chart-icon">🦠</span>
+          K-Factor & Viral Growth Analysis
         </div>
         <div class="chart-filters">
           <button class="filter-btn active" data-filter="7d">7D</button>
@@ -1123,55 +1099,265 @@
         </div>
       </div>
       <div class="chart-container">
-        <svg class="chart-svg" viewBox="0 0 800 200">
+        <svg class="chart-svg" viewBox="0 0 900 320">
           <defs>
-            <linearGradient id="lineGrad1" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.3" />
-              <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:0" />
+            <linearGradient id="viralGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.8" />
+              <stop offset="100%" style="stop-color:#059669;stop-opacity:0.3" />
             </linearGradient>
-            <linearGradient id="lineGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
-              <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.3" />
-              <stop offset="100%" style="stop-color:#10b981;stop-opacity:0" />
+            <linearGradient id="organicGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:0.8" />
+              <stop offset="100%" style="stop-color:#1d4ed8;stop-opacity:0.3" />
             </linearGradient>
           </defs>
-          <!-- Area fills -->
-          <path d="M50,150 Q200,120 350,100 T650,80 L650,180 L50,180 Z" fill="url(#lineGrad1)" />
-          <path d="M50,170 Q200,140 350,130 T650,110 L650,180 L50,180 Z" fill="url(#lineGrad2)" />
-          <!-- Lines -->
-          <path d="M50,150 Q200,120 350,100 T650,80" stroke="#3b82f6" stroke-width="3" fill="none" />
-          <path d="M50,170 Q200,140 350,130 T650,110" stroke="#10b981" stroke-width="3" fill="none" />
+          
+          <!-- Grid lines -->
+          <g stroke="rgba(255,255,255,0.1)" stroke-width="0.5" opacity="0.5">
+            <line x1="50" y1="50" x2="850" y2="50" />
+            <line x1="50" y1="100" x2="850" y2="100" />
+            <line x1="50" y1="150" x2="850" y2="150" />
+            <line x1="50" y1="200" x2="850" y2="200" />
+            <line x1="50" y1="250" x2="850" y2="250" />
+          </g>
+          
+          <!-- Y-axis labels -->
+          <text x="40" y="55" text-anchor="end" fill="rgba(255,255,255,0.7)" font-size="10">1.0</text>
+          <text x="40" y="105" text-anchor="end" fill="rgba(255,255,255,0.7)" font-size="10">0.8</text>
+          <text x="40" y="155" text-anchor="end" fill="rgba(255,255,255,0.7)" font-size="10">0.6</text>
+          <text x="40" y="205" text-anchor="end" fill="rgba(255,255,255,0.7)" font-size="10">0.4</text>
+          <text x="40" y="255" text-anchor="end" fill="rgba(255,255,255,0.7)" font-size="10">0.2</text>
+          
+          <!-- Viral growth area -->
+          <path d="M50,240 Q200,220 350,200 T650,140 L650,280 L50,280 Z" fill="url(#viralGrad)" />
+          
+          <!-- Organic growth area -->
+          <path d="M50,260 Q200,250 350,240 T650,200 L650,280 L50,280 Z" fill="url(#organicGrad)" />
+          
+          <!-- Viral growth line -->
+          <path d="M50,240 Q200,220 350,200 T650,140" stroke="#10b981" stroke-width="3" fill="none" />
+          
+          <!-- Organic growth line -->
+          <path d="M50,260 Q200,250 350,240 T650,200" stroke="#3b82f6" stroke-width="3" fill="none" />
+          
           <!-- Data points -->
-          <circle cx="50" cy="150" r="4" fill="#3b82f6" />
-          <circle cx="200" cy="120" r="4" fill="#3b82f6" />
-          <circle cx="350" cy="100" r="4" fill="#3b82f6" />
-          <circle cx="500" cy="90" r="4" fill="#3b82f6" />
-          <circle cx="650" cy="80" r="4" fill="#3b82f6" />
-          <circle cx="50" cy="170" r="4" fill="#10b981" />
-          <circle cx="200" cy="140" r="4" fill="#10b981" />
-          <circle cx="350" cy="130" r="4" fill="#10b981" />
-          <circle cx="500" cy="120" r="4" fill="#10b981" />
-          <circle cx="650" cy="110" r="4" fill="#10b981" />
+          <circle cx="50" cy="240" r="4" fill="#10b981" />
+          <circle cx="200" cy="220" r="4" fill="#10b981" />
+          <circle cx="350" cy="200" r="4" fill="#10b981" />
+          <circle cx="500" cy="170" r="4" fill="#10b981" />
+          <circle cx="650" cy="140" r="4" fill="#10b981" />
+          
+          <circle cx="50" cy="260" r="4" fill="#3b82f6" />
+          <circle cx="200" cy="250" r="4" fill="#3b82f6" />
+          <circle cx="350" cy="240" r="4" fill="#3b82f6" />
+          <circle cx="500" cy="220" r="4" fill="#3b82f6" />
+          <circle cx="650" cy="200" r="4" fill="#3b82f6" />
+          
+          <!-- X-axis labels -->
+          <text x="50" y="295" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">Week 1</text>
+          <text x="200" y="295" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">Week 2</text>
+          <text x="350" y="295" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">Week 3</text>
+          <text x="500" y="295" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">Week 4</text>
+          <text x="650" y="295" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">Week 5</text>
+          
+          <!-- K-Factor threshold line -->
+          <line x1="50" y1="150" x2="850" y2="150" stroke="#f59e0b" stroke-width="2" stroke-dasharray="5,5" opacity="0.8" />
+          <text x="55" y="145" fill="#f59e0b" font-size="10" font-weight="600">K-Factor = 0.6 (Target)</text>
         </svg>
       </div>
       <div class="chart-legend">
         <div class="legend-item">
-          <div class="legend-color" style="background: #3b82f6;"></div>
-          <span>Conversion Rate</span>
+          <div class="legend-color" style="background: #10b981;"></div>
+          <span>Viral User Acquisition (K-Factor)</span>
         </div>
         <div class="legend-item">
+          <div class="legend-color" style="background: #3b82f6;"></div>
+          <span>Organic User Growth</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #f59e0b;"></div>
+          <span>Target Threshold</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-section scale-in interactive-chart" data-chart="ltv-cac">
+      <div class="chart-header">
+        <div class="chart-title">
+          <span class="chart-icon">💎</span>
+          LTV vs CAC Analysis by Demographic
+        </div>
+        <div class="chart-filters">
+          <button class="filter-btn active" data-filter="all">All Segments</button>
+          <button class="filter-btn" data-filter="age">By Age</button>
+          <button class="filter-btn" data-filter="gender">By Gender</button>
+        </div>
+      </div>
+      <div class="chart-container">
+        <svg class="chart-svg" viewBox="0 0 800 300">
+          <defs>
+            <linearGradient id="highLTVGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.8" />
+              <stop offset="100%" style="stop-color:#059669;stop-opacity:0.6" />
+            </linearGradient>
+            <linearGradient id="mediumLTVGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.8" />
+              <stop offset="100%" style="stop-color:#d97706;stop-opacity:0.6" />
+            </linearGradient>
+            <linearGradient id="lowLTVGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#ef4444;stop-opacity:0.8" />
+              <stop offset="100%" style="stop-color:#dc2626;stop-opacity:0.6" />
+            </linearGradient>
+          </defs>
+          
+          <!-- Grid lines -->
+          <g stroke="rgba(255,255,255,0.1)" stroke-width="1" opacity="0.5">
+            <line x1="100" y1="50" x2="100" y2="250" />
+            <line x1="200" y1="50" x2="200" y2="250" />
+            <line x1="300" y1="50" x2="300" y2="250" />
+            <line x1="400" y1="50" x2="400" y2="250" />
+            <line x1="500" y1="50" x2="500" y2="250" />
+            <line x1="600" y1="50" x2="600" y2="250" />
+            <line x1="700" y1="50" x2="700" y2="250" />
+            <line x1="80" y1="75" x2="720" y2="75" />
+            <line x1="80" y1="125" x2="720" y2="125" />
+            <line x1="80" y1="175" x2="720" y2="175" />
+            <line x1="80" y1="225" x2="720" y2="225" />
+          </g>
+          
+          <!-- Bubble chart points (LTV vs CAC) -->
+          <!-- High LTV segments -->
+          <circle cx="150" cy="85" r="28" fill="url(#highLTVGrad)" />
+          <text x="150" y="90" text-anchor="middle" fill="white" font-size="10" font-weight="600">F 25-34</text>
+          
+          <circle cx="220" cy="110" r="25" fill="url(#highLTVGrad)" />
+          <text x="220" y="115" text-anchor="middle" fill="white" font-size="9" font-weight="600">M 25-34</text>
+          
+          <!-- Medium LTV segments -->
+          <circle cx="320" cy="140" r="22" fill="url(#mediumLTVGrad)" />
+          <text x="320" y="145" text-anchor="middle" fill="white" font-size="9" font-weight="600">F 35-44</text>
+          
+          <circle cx="380" cy="160" r="20" fill="url(#mediumLTVGrad)" />
+          <text x="380" y="165" text-anchor="middle" fill="white" font-size="8" font-weight="600">M 35-44</text>
+          
+          <!-- Lower LTV segments -->
+          <circle cx="480" cy="180" r="18" fill="url(#lowLTVGrad)" />
+          <text x="480" y="185" text-anchor="middle" fill="white" font-size="8" font-weight="600">F 18-24</text>
+          
+          <circle cx="550" cy="200" r="16" fill="url(#lowLTVGrad)" />
+          <text x="550" y="205" text-anchor="middle" fill="white" font-size="8" font-weight="600">M 18-24</text>
+          
+          <!-- Axes labels -->
+          <text x="400" y="285" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="12">Customer Acquisition Cost ($)</text>
+          <text x="30" y="150" text-anchor="middle" fill="rgba(255,255,255,0.7)" font-size="12" transform="rotate(-90 30 150)">Lifetime Value ($)</text>
+          
+          <!-- Scale indicators -->
+          <text x="100" y="275" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">$20</text>
+          <text x="200" y="275" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">$30</text>
+          <text x="300" y="275" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">$40</text>
+          <text x="400" y="275" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">$50</text>
+          <text x="500" y="275" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">$60</text>
+          <text x="600" y="275" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">$70</text>
+          <text x="700" y="275" text-anchor="middle" fill="rgba(255,255,255,0.6)" font-size="10">$80</text>
+          
+          <text x="70" y="230" text-anchor="end" fill="rgba(255,255,255,0.6)" font-size="10">$80</text>
+          <text x="70" y="180" text-anchor="end" fill="rgba(255,255,255,0.6)" font-size="10">$120</text>
+          <text x="70" y="130" text-anchor="end" fill="rgba(255,255,255,0.6)" font-size="10">$160</text>
+          <text x="70" y="80" text-anchor="end" fill="rgba(255,255,255,0.6)" font-size="10">$200</text>
+          
+          <!-- LTV:CAC ratio lines -->
+          <line x1="80" y1="240" x2="400" y2="120" stroke="#10b981" stroke-width="2" stroke-dasharray="3,3" opacity="0.6" />
+          <text x="240" y="175" fill="#10b981" font-size="9" font-weight="600">3:1 Ratio (Good)</text>
+          
+          <line x1="80" y1="200" x2="320" y2="80" stroke="#f59e0b" stroke-width="2" stroke-dasharray="3,3" opacity="0.6" />
+          <text x="200" y="135" fill="#f59e0b" font-size="9" font-weight="600">4:1 Ratio (Excellent)</text>
+        </svg>
+      </div>
+      <div class="chart-legend">
+        <div class="legend-item">
+          <div class="legend-color" style="background: #10b981; border-radius: 50%;"></div>
+          <span>High LTV Segments ($120+ LTV)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #f59e0b; border-radius: 50%;"></div>
+          <span>Medium LTV Segments ($80-120 LTV)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #ef4444; border-radius: 50%;"></div>
+          <span>Lower LTV Segments (<$80 LTV)</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="chart-section scale-in interactive-chart" data-chart="health-outcomes">
+      <div class="chart-header">
+        <div class="chart-title">
+          <span class="chart-icon">🏥</span>
+          Health Intervention Outcomes & Success Rates
+        </div>
+        <div class="chart-filters">
+          <button class="filter-btn active" data-filter="30d">30D</button>
+          <button class="filter-btn" data-filter="60d">60D</button>
+          <button class="filter-btn" data-filter="90d">90D</button>
+        </div>
+      </div>
+      <div class="chart-container">
+        <svg class="chart-svg" viewBox="0 0 800 200">
+          <defs>
+            <linearGradient id="successGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.3" />
+              <stop offset="100%" style="stop-color:#10b981;stop-opacity:0" />
+            </linearGradient>
+            <linearGradient id="relapseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+              <stop offset="0%" style="stop-color:#ef4444;stop-opacity:0.3" />
+              <stop offset="100%" style="stop-color:#ef4444;stop-opacity:0" />
+            </linearGradient>
+          </defs>
+          
+          <!-- Success rate area -->
+          <path d="M50,150 Q200,120 350,100 T650,70 L650,180 L50,180 Z" fill="url(#successGrad)" />
+          
+          <!-- Relapse rate area -->
+          <path d="M50,170 Q200,160 350,150 T650,140 L650,180 L50,180 Z" fill="url(#relapseGrad)" />
+          
+          <!-- Success rate line -->
+          <path d="M50,150 Q200,120 350,100 T650,70" stroke="#10b981" stroke-width="3" fill="none" />
+          
+          <!-- Relapse rate line -->
+          <path d="M50,170 Q200,160 350,150 T650,140" stroke="#ef4444" stroke-width="3" fill="none" />
+          
+          <!-- Data points -->
+          <circle cx="50" cy="150" r="4" fill="#10b981" />
+          <circle cx="200" cy="120" r="4" fill="#10b981" />
+          <circle cx="350" cy="100" r="4" fill="#10b981" />
+          <circle cx="500" cy="85" r="4" fill="#10b981" />
+          <circle cx="650" cy="70" r="4" fill="#10b981" />
+          
+          <circle cx="50" cy="170" r="4" fill="#ef4444" />
+          <circle cx="200" cy="160" r="4" fill="#ef4444" />
+          <circle cx="350" cy="150" r="4" fill="#ef4444" />
+          <circle cx="500" cy="145" r="4" fill="#ef4444" />
+          <circle cx="650" cy="140" r="4" fill="#ef4444" />
+        </svg>
+      </div>
+      <div class="chart-legend">
+        <div class="legend-item">
           <div class="legend-color" style="background: #10b981;"></div>
-          <span>Success Rate</span>
+          <span>Quit Success Rate (68.2%)</span>
+        </div>
+        <div class="legend-item">
+          <div class="legend-color" style="background: #ef4444;"></div>
+          <span>Relapse Rate (31.8%)</span>
         </div>
       </div>
     </div>
 
     <div class="cohort-section fade-in">
       <div class="cohort-header">
-        <div class="cohort-title">Demographic Performance Analysis</div>
+        <div class="cohort-title">User Acquisition & Retention Cohort Analysis</div>
         <div class="cohort-controls">
           <button class="control-button active" data-period="all">All Cohorts</button>
-          <button class="control-button" data-period="6m">6M</button>
-          <button class="control-button" data-period="12m">12M</button>
+          <button class="control-button" data-period="premium">Premium Users</button>
+          <button class="control-button" data-period="organic">Organic Only</button>
         </div>
       </div>
       
@@ -1181,81 +1367,56 @@
             <tr>
               <th>Cohort Month</th>
               <th>Users</th>
-              <th>Month 0</th>
-              <th>Month 1</th>
-              <th>Month 2</th>
-              <th>Month 3</th>
-              <th>Month 6</th>
-              <th>Month 12</th>
+              <th>K-Factor</th>
+              <th>Day 1</th>
+              <th>Day 7</th>
+              <th>Day 30</th>
+              <th>Day 90</th>
+              <th>Quit Success</th>
+              <th>LTV</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td><strong>Jan 2024</strong></td>
-              <td>2,847</td>
+              <td><strong>Sep 2024</strong></td>
+              <td>284,750</td>
+              <td><span class="retention-cell retention-high">0.89</span></td>
               <td><span class="retention-cell retention-high">100%</span></td>
-              <td><span class="retention-cell retention-high">84.2%</span></td>
-              <td><span class="retention-cell retention-high">78.1%</span></td>
-              <td><span class="retention-cell retention-high">73.2%</span></td>
-              <td><span class="retention-cell retention-medium">65.8%</span></td>
-              <td><span class="retention-cell retention-medium">58.4%</span></td>
+              <td><span class="retention-cell retention-high">72.4%</span></td>
+              <td><span class="retention-cell retention-high">45.8%</span></td>
+              <td><span class="retention-cell retention-medium">28.2%</span></td>
+              <td><span class="retention-cell retention-high">71.5%</span></td>
+              <td><span class="retention-cell retention-high">$142</span></td>
             </tr>
             <tr>
-              <td><strong>Feb 2024</strong></td>
-              <td>3,156</td>
+              <td><strong>Oct 2024</strong></td>
+              <td>315,680</td>
+              <td><span class="retention-cell retention-high">0.76</span></td>
               <td><span class="retention-cell retention-high">100%</span></td>
-              <td><span class="retention-cell retention-high">86.7%</span></td>
-              <td><span class="retention-cell retention-high">79.3%</span></td>
-              <td><span class="retention-cell retention-high">74.8%</span></td>
-              <td><span class="retention-cell retention-medium">67.2%</span></td>
-              <td><span class="retention-cell retention-medium">-</span></td>
+              <td><span class="retention-cell retention-high">74.1%</span></td>
+              <td><span class="retention-cell retention-high">47.3%</span></td>
+              <td><span class="retention-cell retention-medium">29.8%</span></td>
+              <td><span class="retention-cell retention-high">69.8%</span></td>
+              <td><span class="retention-cell retention-high">$138</span></td>
             </tr>
             <tr>
-              <td><strong>Mar 2024</strong></td>
-              <td>2,923</td>
+              <td><strong>Nov 2024</strong></td>
+              <td>298,420</td>
+              <td><span class="retention-cell retention-high">0.81</span></td>
               <td><span class="retention-cell retention-high">100%</span></td>
-              <td><span class="retention-cell retention-high">82.1%</span></td>
-              <td><span class="retention-cell retention-high">76.4%</span></td>
-              <td><span class="retention-cell retention-high">71.9%</span></td>
-              <td><span class="retention-cell retention-medium">64.3%</span></td>
-              <td><span class="retention-cell retention-medium">-</span></td>
+              <td><span class="retention-cell retention-high">71.6%</span></td>
+              <td><span class="retention-cell retention-high">44.2%</span></td>
+              <td><span class="retention-cell retention-medium">27.1%</span></td>
+              <td><span class="retention-cell retention-high">67.3%</span></td>
+              <td><span class="retention-cell retention-high">$134</span></td>
             </tr>
             <tr>
-              <td><strong>Apr 2024</strong></td>
-              <td>3,412</td>
+              <td><strong>Dec 2024</strong></td>
+              <td>341,290</td>
+              <td><span class="retention-cell retention-high">0.73</span></td>
               <td><span class="retention-cell retention-high">100%</span></td>
-              <td><span class="retention-cell retention-high">88.9%</span></td>
-              <td><span class="retention-cell retention-high">81.2%</span></td>
-              <td><span class="retention-cell retention-high">76.1%</span></td>
-              <td><span class="retention-cell retention-medium">68.7%</span></td>
-              <td><span class="retention-cell retention-medium">-</span></td>
-            </tr>
-            <tr>
-              <td><strong>May 2024</strong></td>
-              <td>2,789</td>
-              <td><span class="retention-cell retention-high">100%</span></td>
-              <td><span class="retention-cell retention-high">83.4%</span></td>
-              <td><span class="retention-cell retention-high">77.8%</span></td>
-              <td><span class="retention-cell retention-high">72.5%</span></td>
-              <td><span class="retention-cell retention-medium">-</span></td>
-              <td><span class="retention-cell retention-medium">-</span></td>
-            </tr>
-            <tr>
-              <td><strong>Jun 2024</strong></td>
-              <td>3,891</td>
-              <td><span class="retention-cell retention-high">100%</span></td>
-              <td><span class="retention-cell retention-high">87.2%</span></td>
-              <td><span class="retention-cell retention-high">80.6%</span></td>
-              <td><span class="retention-cell retention-medium">-</span></td>
-              <td><span class="retention-cell retention-medium">-</span></td>
-              <td><span class="retention-cell retention-medium">-</span></td>
-            </tr>
-            <tr>
-              <td><strong>Jul 2024</strong></td>
-              <td>4,203</td>
-              <td><span class="retention-cell retention-high">100%</span></td>
-              <td><span class="retention-cell retention-high">85.1%</span></td>
-              <td><span class="retention-cell retention-medium">-</span></td>
+              <td><span class="retention-cell retention-high">76.8%</span></td>
+              <td><span class="retention-cell retention-high">48.9%</span></td>
               <td><span class="retention-cell retention-medium">-</span></td>
               <td><span class="retention-cell retention-medium">-</span></td>
               <td><span class="retention-cell retention-medium">-</span></td>
@@ -1312,17 +1473,24 @@
         const currentValue = startValue + (target - startValue) * easeOutQuart;
         
         // Format number based on size
-        if (target >= 1000) {
+        if (target >= 1000000) {
+          element.textContent = (currentValue / 1000000).toFixed(1) + 'M';
+        } else if (target >= 1000) {
           element.textContent = Math.floor(currentValue).toLocaleString();
         } else {
-          element.textContent = currentValue.toFixed(target < 10 ? 2 : 0);
+          element.textContent = currentValue.toFixed(target < 10 ? 2 : target < 100 ? 1 : 0);
         }
         
         if (progress < 1) {
           requestAnimationFrame(updateCounter);
         } else {
-          element.textContent = target >= 1000 ? target.toLocaleString() : 
-                               target < 10 ? target.toFixed(2) : target;
+          if (target >= 1000000) {
+            element.textContent = (target / 1000000).toFixed(1) + 'M';
+          } else if (target >= 1000) {
+            element.textContent = target.toLocaleString();
+          } else {
+            element.textContent = target < 10 ? target.toFixed(2) : target < 100 ? target.toFixed(1) : target;
+          }
         }
       }
       
@@ -1398,7 +1566,7 @@
         setTimeout(() => {
           this.classList.add('active');
           setButtonLoading(this, false);
-          showToast(`Loaded ${period.toUpperCase()} cohort data`);
+          showToast(`Loaded ${period.toUpperCase()} cohort analysis`);
           
           // Animate table rows
           const rows = document.querySelectorAll('.cohort-table tbody tr');
@@ -1429,23 +1597,40 @@
           this.classList.remove('updated');
         }, 600);
         
-        // Simulate data refresh
+        // Simulate data refresh with realistic business metrics
         const counter = this.querySelector('.counter');
         if (counter && !counter.classList.contains('refreshing')) {
           counter.classList.add('refreshing');
           
-          // Generate new random value (±5% of original)
+          // Generate realistic variations for business metrics
           const originalTarget = parseFloat(counter.dataset.target);
-          const variation = originalTarget * 0.05;
-          const newTarget = originalTarget + (Math.random() - 0.5) * 2 * variation;
+          let newTarget;
           
-          counter.dataset.target = newTarget.toFixed(originalTarget < 10 ? 2 : 0);
+          switch(metric) {
+            case 'k-factor':
+              newTarget = Math.max(0.1, originalTarget + (Math.random() - 0.5) * 0.1);
+              break;
+            case 'ltv':
+              newTarget = Math.max(50, originalTarget + (Math.random() - 0.5) * 20);
+              break;
+            case 'cac':
+              newTarget = Math.max(15, originalTarget + (Math.random() - 0.5) * 8);
+              break;
+            case 'quit-rate':
+              newTarget = Math.max(40, Math.min(80, originalTarget + (Math.random() - 0.5) * 5));
+              break;
+            default:
+              const variation = originalTarget * 0.05;
+              newTarget = originalTarget + (Math.random() - 0.5) * 2 * variation;
+          }
+          
+          counter.dataset.target = newTarget.toFixed(originalTarget < 10 ? 2 : originalTarget < 100 ? 1 : 0);
           counter.classList.remove('animated');
           
           setTimeout(() => {
             animateCounter(counter);
             counter.classList.remove('refreshing');
-            showToast(`${metric.toUpperCase()} metric updated`);
+            showToast(`${metric.toUpperCase().replace('-', ' ')} metric updated`);
           }, 300);
         }
       });
@@ -1455,7 +1640,13 @@
     document.querySelectorAll('.interactive-chart').forEach(chart => {
       chart.addEventListener('click', function() {
         const chartType = this.dataset.chart;
-        showToast(`Analyzing ${chartType} data...`, 'info');
+        const messages = {
+          'viral-growth': 'Analyzing viral growth patterns and K-factor trends...',
+          'ltv-cac': 'Calculating LTV:CAC ratios across demographic segments...',
+          'health-outcomes': 'Processing health intervention success metrics...'
+        };
+        
+        showToast(messages[chartType] || `Analyzing ${chartType} data...`, 'info');
         
         // Add subtle animation
         this.style.transform = 'scale(1.01)';
@@ -1463,29 +1654,6 @@
           this.style.transform = 'scale(1)';
         }, 200);
       });
-    });
-
-    // ===== PARALLAX EFFECT =====
-    let ticking = false;
-    
-    function updateParallax() {
-      const scrolled = window.pageYOffset;
-      const parallaxElements = document.querySelectorAll('.parallax');
-      
-      parallaxElements.forEach(element => {
-        const speed = element.dataset.speed || 0.5;
-        const yPos = -(scrolled * speed);
-        element.style.setProperty('--scroll-y', `${yPos}px`);
-      });
-      
-      ticking = false;
-    }
-    
-    window.addEventListener('scroll', () => {
-      if (!ticking) {
-        requestAnimationFrame(updateParallax);
-        ticking = true;
-      }
     });
 
     // ===== KEYBOARD SHORTCUTS =====
@@ -1496,44 +1664,81 @@
         document.querySelectorAll('.metric-card').forEach(card => {
           setTimeout(() => card.click(), Math.random() * 1000);
         });
-        showToast('Refreshing all metrics...', 'info');
+        showToast('Refreshing all business metrics...', 'info');
       }
       
-      // Press 'D' to toggle dark mode (demo feature)
-      if (e.key.toLowerCase() === 'd' && !e.ctrlKey && !e.metaKey) {
+      // Press 'K' to highlight K-factor metrics
+      if (e.key.toLowerCase() === 'k' && !e.ctrlKey && !e.metaKey) {
         e.preventDefault();
-        document.body.style.filter = document.body.style.filter ? '' : 'hue-rotate(180deg)';
-        showToast('Toggled visual mode', 'info');
+        const kFactorCard = document.querySelector('[data-metric="k-factor"]');
+        if (kFactorCard) {
+          kFactorCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          kFactorCard.click();
+        }
+        showToast('K-Factor analysis highlighted', 'info');
+      }
+      
+      // Press 'L' to focus on LTV metrics
+      if (e.key.toLowerCase() === 'l' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        const ltvCard = document.querySelector('[data-metric="ltv"]');
+        if (ltvCard) {
+          ltvCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          ltvCard.click();
+        }
+        showToast('LTV analysis focused', 'info');
       }
     });
 
     // ===== DEMO DATA SIMULATION =====
     function simulateRealTimeUpdates() {
       setInterval(() => {
-        // Randomly update a metric card
+        // Randomly update a metric card with business-relevant changes
         const cards = document.querySelectorAll('.metric-card');
         const randomCard = cards[Math.floor(Math.random() * cards.length)];
         
-        if (Math.random() < 0.3) { // 30% chance every 10 seconds
+        if (Math.random() < 0.2) { // 20% chance every 15 seconds
           randomCard.click();
         }
-      }, 10000);
+      }, 15000);
+      
+      // Simulate real-time K-factor updates
+      setInterval(() => {
+        const kFactorElements = document.querySelectorAll('[data-target="0.73"]');
+        kFactorElements.forEach(el => {
+          if (!el.classList.contains('refreshing')) {
+            const newKFactor = 0.73 + (Math.random() - 0.5) * 0.1;
+            el.dataset.target = newKFactor.toFixed(2);
+            el.classList.remove('animated');
+            animateCounter(el);
+          }
+        });
+      }, 30000);
     }
 
     // ===== INITIALIZE =====
     document.addEventListener('DOMContentLoaded', function() {
       // Show welcome message
       setTimeout(() => {
-        showToast('Zeus Attribution Dashboard loaded successfully!', 'success');
+        showToast('Zeus Enterprise Analytics Dashboard loaded successfully!', 'success');
       }, 1000);
       
       // Start demo simulation
       setTimeout(simulateRealTimeUpdates, 5000);
       
-      // Add keyboard shortcut hint
+      // Add keyboard shortcut hints
       setTimeout(() => {
-        showToast('💡 Press R to refresh metrics, D to toggle mode', 'info');
+        showToast('💡 Press R to refresh, K for K-Factor, L for LTV analysis', 'info');
       }, 8000);
+      
+      // Simulate live data indicator
+      setInterval(() => {
+        const indicator = document.querySelector('.live-dot');
+        indicator.style.animation = 'none';
+        setTimeout(() => {
+          indicator.style.animation = 'pulse-dot 2s infinite';
+        }, 100);
+      }, 10000);
     });
 
     // ===== SMOOTH SCROLL TO SECTIONS =====
@@ -1550,8 +1755,10 @@
     // Add click handlers for smooth navigation
     document.querySelector('.header h1').addEventListener('click', () => {
       window.scrollTo({ top: 0, behavior: 'smooth' });
-      showToast('Scrolled to top', 'info');
+      showToast('Scrolled to dashboard overview', 'info');
     });
   </script>
+</body>
+</html>
 </body>
 </html>
