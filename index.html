@@ -687,87 +687,243 @@
       background-size: 200px 100%;
       animation: shimmer 1.5s infinite;
     }
+
+    /* Scroll Animations */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .slide-in-left {
+      opacity: 0;
+      transform: translateX(-50px);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .slide-in-left.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .slide-in-right {
+      opacity: 0;
+      transform: translateX(50px);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .slide-in-right.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .scale-in {
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .scale-in.visible {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* Interactive Elements */
+    .interactive-chart {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .interactive-chart:hover {
+      transform: scale(1.02);
+    }
+
+    /* Data Counter Animation */
+    @keyframes countUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .counter {
+      animation: countUp 0.8s ease-out;
+    }
+
+    /* Progress Bar Animation */
+    @keyframes fillBar {
+      from { width: 0%; }
+      to { width: var(--target-width); }
+    }
+
+    .progress-bar {
+      background: linear-gradient(90deg, #10b981, #3b82f6);
+      height: 4px;
+      border-radius: 2px;
+      animation: fillBar 1.5s ease-out;
+    }
+
+    /* Notification Toast */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: linear-gradient(135deg, rgba(16, 185, 129, 0.9), rgba(5, 150, 105, 0.9));
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
+      transform: translateX(400px);
+      transition: all 0.3s ease;
+      z-index: 1000;
+      font-weight: 600;
+      backdrop-filter: blur(10px);
+    }
+
+    .toast.show {
+      transform: translateX(0);
+    }
+
+    /* Button Loading State */
+    .btn-loading {
+      position: relative;
+      pointer-events: none;
+    }
+
+    .btn-loading::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border: 2px solid transparent;
+      border-top: 2px solid currentColor;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    @keyframes spin {
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+
+    /* Chart Hover Effects */
+    .chart-section:hover .chart-container {
+      box-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
+    }
+
+    /* Metric Card Pulse Effect */
+    .metric-card.updated {
+      animation: pulse-update 0.6s ease-out;
+    }
+
+    @keyframes pulse-update {
+      0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.4); }
+      50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(59, 130, 246, 0); }
+      100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(59, 130, 246, 0); }
+    }
+
+    /* Smooth Scrolling */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* Parallax Effect */
+    .parallax {
+      transform: translateY(var(--scroll-y, 0));
+    }
   </style>
 </head>
 <body>
   <div class="dashboard">
-    <div class="header">
+    <div class="header fade-in">
       <h1>Zeus Attribution Model</h1>
       <div class="date">August 5, 2025</div>
     </div>
 
-    <div class="ai-assistant">
+    <div class="ai-assistant slide-in-left">
       <div class="ai-header">
         <div class="ai-icon">🤖</div>
         <div class="ai-title">Zeus AI Assistant</div>
       </div>
       <div class="ai-content">
-        Based on July's app cohort data, females aged 25-34 are showing the highest 6-month retention conversion success rate at 73.2%. This demographic has the strongest retention curve and lowest religion indicators.
+        Based on July's app cohort data, females aged 25-34 are showing the highest 6-month retention conversion success rate at <span class="counter" data-target="73.2">0</span>%. This demographic has the strongest retention curve and lowest religion indicators.
       </div>
       <div class="ai-recommendation">
-        <strong>Recommendation:</strong> So ad spend on Meta campaign "SF_Female_25_34_Web-max" (current spend: $1,647/day → target: $5,641/day) to maximize high-intent conversions during Q3 peak season.
+        <strong>Recommendation:</strong> 3x ad spend on Meta campaign "SF_Female_25_34_Web-max" (current spend: $<span class="counter" data-target="1647">0</span>/day → target: $<span class="counter" data-target="5641">0</span>/day) to maximize high-intent conversions during Q3 peak season.
       </div>
     </div>
 
-    <div class="insights-section">
+    <div class="insights-section slide-in-right">
       <div class="insights-header">
         <div class="insights-icon">💡</div>
         <div class="insights-title">Zeus Model Insights</div>
       </div>
       <div class="insights-content">
-        The Zeus attribution Model identified seven performance patterns showing 164% ROI improvement when focusing ad spend on high-performing demographics. Current optimization suggests reallocating 73% of budget from low-performing segments to maximize total conversion volume by an estimated 47%.
+        The Zeus attribution Model identified seven performance patterns showing <span class="counter" data-target="164">0</span>% ROI improvement when focusing ad spend on high-performing demographics. Current optimization suggests reallocating <span class="counter" data-target="73">0</span>% of budget from low-performing segments to maximize total conversion volume by an estimated <span class="counter" data-target="47">0</span>%.
       </div>
     </div>
 
-    <div class="metrics-grid">
-      <div class="metric-card">
+    <div class="metrics-grid fade-in">
+      <div class="metric-card" data-metric="installs">
         <div class="metric-label">APP INSTALLS</div>
-        <div class="metric-value">128,034</div>
+        <div class="metric-value counter" data-target="128034">0</div>
         <div class="metric-change positive">+12.3% vs last month</div>
+        <div class="progress-bar" style="--target-width: 85%;"></div>
       </div>
       
-      <div class="metric-card">
+      <div class="metric-card" data-metric="spend">
         <div class="metric-label">AD SPEND</div>
-        <div class="metric-value">$342,580</div>
+        <div class="metric-value">$<span class="counter" data-target="342580">0</span></div>
         <div class="metric-change positive">+8.7% vs last month</div>
+        <div class="progress-bar" style="--target-width: 72%;"></div>
       </div>
       
-      <div class="metric-card">
+      <div class="metric-card" data-metric="orders">
         <div class="metric-label">ORDERS</div>
-        <div class="metric-value">58,247</div>
+        <div class="metric-value counter" data-target="58247">0</div>
         <div class="metric-change positive">+15.2% vs last month</div>
+        <div class="progress-bar" style="--target-width: 92%;"></div>
       </div>
       
-      <div class="metric-card">
+      <div class="metric-card" data-metric="conversion">
         <div class="metric-label">CONVERSION RATE</div>
-        <div class="metric-value">3.94%</div>
+        <div class="metric-value"><span class="counter" data-target="3.94">0</span>%</div>
         <div class="metric-change negative">-0.2% vs last month</div>
+        <div class="progress-bar" style="--target-width: 65%;"></div>
       </div>
       
-      <div class="metric-card">
+      <div class="metric-card" data-metric="cpi">
         <div class="metric-label">COST PER INSTALL</div>
-        <div class="metric-value">$1.32</div>
+        <div class="metric-value">$<span class="counter" data-target="1.32">0</span></div>
         <div class="metric-change negative">-3.1% vs last month</div>
+        <div class="progress-bar" style="--target-width: 58%;"></div>
       </div>
       
-      <div class="metric-card">
+      <div class="metric-card" data-metric="cpm">
         <div class="metric-label">AVG CPM</div>
-        <div class="metric-value">$5.18</div>
+        <div class="metric-value">$<span class="counter" data-target="5.18">0</span></div>
         <div class="metric-change positive">+2.1% vs last month</div>
+        <div class="progress-bar" style="--target-width: 78%;"></div>
       </div>
     </div>
 
     <!-- Enhanced Chart Sections -->
-    <div class="chart-section">
+    <div class="chart-section scale-in interactive-chart" data-chart="cohort">
       <div class="chart-header">
         <div class="chart-title">
           <span class="chart-icon">📊</span>
           Vaping Cessation Cohort Analysis - Quit Journey Progression
         </div>
         <div class="chart-filters">
-          <button class="filter-btn active">All Cohorts</button>
-          <button class="filter-btn">6M</button>
-          <button class="filter-btn">12M</button>
+          <button class="filter-btn active" data-filter="all">All Cohorts</button>
+          <button class="filter-btn" data-filter="6m">6M</button>
+          <button class="filter-btn" data-filter="12m">12M</button>
         </div>
       </div>
       <div class="chart-container">
@@ -860,16 +1016,16 @@
       </div>
     </div>
 
-    <div class="chart-section">
+    <div class="chart-section scale-in interactive-chart" data-chart="timeline">
       <div class="chart-header">
         <div class="chart-title">
           <span class="chart-icon">💰</span>
           Cessation Timeline vs Cost Per Quit Analysis
         </div>
         <div class="chart-filters">
-          <button class="filter-btn active">3M</button>
-          <button class="filter-btn">6M</button>
-          <button class="filter-btn">12M</button>
+          <button class="filter-btn active" data-filter="3m">3M</button>
+          <button class="filter-btn" data-filter="6m">6M</button>
+          <button class="filter-btn" data-filter="12m">12M</button>
         </div>
       </div>
       <div class="chart-container">
@@ -954,16 +1110,16 @@
       </div>
     </div>
 
-    <div class="chart-section">
+    <div class="chart-section scale-in interactive-chart" data-chart="trends">
       <div class="chart-header">
         <div class="chart-title">
           <span class="chart-icon">📈</span>
           Performance by Demographic Trends
         </div>
         <div class="chart-filters">
-          <button class="filter-btn active">7D</button>
-          <button class="filter-btn">30D</button>
-          <button class="filter-btn">90D</button>
+          <button class="filter-btn active" data-filter="7d">7D</button>
+          <button class="filter-btn" data-filter="30d">30D</button>
+          <button class="filter-btn" data-filter="90d">90D</button>
         </div>
       </div>
       <div class="chart-container">
@@ -1009,13 +1165,13 @@
       </div>
     </div>
 
-    <div class="cohort-section">
+    <div class="cohort-section fade-in">
       <div class="cohort-header">
-        <div class="cohort-title">Vaping Cessation Cohort Analysis - Quit Journey Progression</div>
+        <div class="cohort-title">Demographic Performance Analysis</div>
         <div class="cohort-controls">
-          <button class="control-button active">All Cohorts</button>
-          <button class="control-button">6M</button>
-          <button class="control-button">12M</button>
+          <button class="control-button active" data-period="all">All Cohorts</button>
+          <button class="control-button" data-period="6m">6M</button>
+          <button class="control-button" data-period="12m">12M</button>
         </div>
       </div>
       
@@ -1109,5 +1265,293 @@
       </div>
     </div>
   </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // ===== SCROLL ANIMATIONS =====
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          
+          // Trigger counter animations when element becomes visible
+          const counters = entry.target.querySelectorAll('.counter');
+          counters.forEach(counter => animateCounter(counter));
+        }
+      });
+    }, observerOptions);
+
+    // Observe all animated elements
+    document.querySelectorAll('.fade-in, .slide-in-left, .slide-in-right, .scale-in').forEach(el => {
+      observer.observe(el);
+    });
+
+    // ===== COUNTER ANIMATIONS =====
+    function animateCounter(element) {
+      if (element.classList.contains('animated')) return;
+      element.classList.add('animated');
+      
+      const target = parseFloat(element.dataset.target);
+      const duration = 2000;
+      const startTime = performance.now();
+      const startValue = 0;
+
+      function updateCounter(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        
+        // Easing function
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const currentValue = startValue + (target - startValue) * easeOutQuart;
+        
+        // Format number based on size
+        if (target >= 1000) {
+          element.textContent = Math.floor(currentValue).toLocaleString();
+        } else {
+          element.textContent = currentValue.toFixed(target < 10 ? 2 : 0);
+        }
+        
+        if (progress < 1) {
+          requestAnimationFrame(updateCounter);
+        } else {
+          element.textContent = target >= 1000 ? target.toLocaleString() : 
+                               target < 10 ? target.toFixed(2) : target;
+        }
+      }
+      
+      requestAnimationFrame(updateCounter);
+    }
+
+    // ===== INTERACTIVE BUTTONS =====
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast ${type}`;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    function setButtonLoading(button, isLoading) {
+      if (isLoading) {
+        button.classList.add('btn-loading');
+        button.style.color = 'transparent';
+      } else {
+        button.classList.remove('btn-loading');
+        button.style.color = '';
+      }
+    }
+
+    // Chart filter buttons
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const chartSection = this.closest('.chart-section');
+        const chartType = chartSection.dataset.chart;
+        const filter = this.dataset.filter;
+        
+        // Set loading state
+        setButtonLoading(this, true);
+        
+        // Remove active class from siblings
+        this.parentElement.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        
+        // Simulate data loading
+        setTimeout(() => {
+          this.classList.add('active');
+          setButtonLoading(this, false);
+          showToast(`Updated ${chartType} chart with ${filter.toUpperCase()} filter`);
+          
+          // Add update animation to chart
+          const chartContainer = chartSection.querySelector('.chart-container');
+          chartContainer.style.transform = 'scale(0.95)';
+          chartContainer.style.opacity = '0.7';
+          
+          setTimeout(() => {
+            chartContainer.style.transform = 'scale(1)';
+            chartContainer.style.opacity = '1';
+          }, 200);
+        }, 800);
+      });
+    });
+
+    // Cohort control buttons
+    document.querySelectorAll('.control-button').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const period = this.dataset.period;
+        
+        // Set loading state
+        setButtonLoading(this, true);
+        
+        // Remove active class from siblings
+        this.parentElement.querySelectorAll('.control-button').forEach(b => b.classList.remove('active'));
+        
+        // Simulate data loading
+        setTimeout(() => {
+          this.classList.add('active');
+          setButtonLoading(this, false);
+          showToast(`Loaded ${period.toUpperCase()} cohort data`);
+          
+          // Animate table rows
+          const rows = document.querySelectorAll('.cohort-table tbody tr');
+          rows.forEach((row, index) => {
+            setTimeout(() => {
+              row.style.transform = 'translateX(-10px)';
+              row.style.opacity = '0.7';
+              setTimeout(() => {
+                row.style.transform = 'translateX(0)';
+                row.style.opacity = '1';
+              }, 100);
+            }, index * 50);
+          });
+        }, 1000);
+      });
+    });
+
+    // ===== METRIC CARD INTERACTIONS =====
+    document.querySelectorAll('.metric-card').forEach(card => {
+      card.addEventListener('click', function() {
+        const metric = this.dataset.metric;
+        
+        // Add pulse animation
+        this.classList.add('updated');
+        
+        // Remove animation class after animation completes
+        setTimeout(() => {
+          this.classList.remove('updated');
+        }, 600);
+        
+        // Simulate data refresh
+        const counter = this.querySelector('.counter');
+        if (counter && !counter.classList.contains('refreshing')) {
+          counter.classList.add('refreshing');
+          
+          // Generate new random value (±5% of original)
+          const originalTarget = parseFloat(counter.dataset.target);
+          const variation = originalTarget * 0.05;
+          const newTarget = originalTarget + (Math.random() - 0.5) * 2 * variation;
+          
+          counter.dataset.target = newTarget.toFixed(originalTarget < 10 ? 2 : 0);
+          counter.classList.remove('animated');
+          
+          setTimeout(() => {
+            animateCounter(counter);
+            counter.classList.remove('refreshing');
+            showToast(`${metric.toUpperCase()} metric updated`);
+          }, 300);
+        }
+      });
+    });
+
+    // ===== CHART INTERACTIONS =====
+    document.querySelectorAll('.interactive-chart').forEach(chart => {
+      chart.addEventListener('click', function() {
+        const chartType = this.dataset.chart;
+        showToast(`Analyzing ${chartType} data...`, 'info');
+        
+        // Add subtle animation
+        this.style.transform = 'scale(1.01)';
+        setTimeout(() => {
+          this.style.transform = 'scale(1)';
+        }, 200);
+      });
+    });
+
+    // ===== PARALLAX EFFECT =====
+    let ticking = false;
+    
+    function updateParallax() {
+      const scrolled = window.pageYOffset;
+      const parallaxElements = document.querySelectorAll('.parallax');
+      
+      parallaxElements.forEach(element => {
+        const speed = element.dataset.speed || 0.5;
+        const yPos = -(scrolled * speed);
+        element.style.setProperty('--scroll-y', `${yPos}px`);
+      });
+      
+      ticking = false;
+    }
+    
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
+    });
+
+    // ===== KEYBOARD SHORTCUTS =====
+    document.addEventListener('keydown', function(e) {
+      // Press 'R' to refresh all metrics
+      if (e.key.toLowerCase() === 'r' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        document.querySelectorAll('.metric-card').forEach(card => {
+          setTimeout(() => card.click(), Math.random() * 1000);
+        });
+        showToast('Refreshing all metrics...', 'info');
+      }
+      
+      // Press 'D' to toggle dark mode (demo feature)
+      if (e.key.toLowerCase() === 'd' && !e.ctrlKey && !e.metaKey) {
+        e.preventDefault();
+        document.body.style.filter = document.body.style.filter ? '' : 'hue-rotate(180deg)';
+        showToast('Toggled visual mode', 'info');
+      }
+    });
+
+    // ===== DEMO DATA SIMULATION =====
+    function simulateRealTimeUpdates() {
+      setInterval(() => {
+        // Randomly update a metric card
+        const cards = document.querySelectorAll('.metric-card');
+        const randomCard = cards[Math.floor(Math.random() * cards.length)];
+        
+        if (Math.random() < 0.3) { // 30% chance every 10 seconds
+          randomCard.click();
+        }
+      }, 10000);
+    }
+
+    // ===== INITIALIZE =====
+    document.addEventListener('DOMContentLoaded', function() {
+      // Show welcome message
+      setTimeout(() => {
+        showToast('Zeus Attribution Dashboard loaded successfully!', 'success');
+      }, 1000);
+      
+      // Start demo simulation
+      setTimeout(simulateRealTimeUpdates, 5000);
+      
+      // Add keyboard shortcut hint
+      setTimeout(() => {
+        showToast('💡 Press R to refresh metrics, D to toggle mode', 'info');
+      }, 8000);
+    });
+
+    // ===== SMOOTH SCROLL TO SECTIONS =====
+    function scrollToSection(sectionClass) {
+      const section = document.querySelector(`.${sectionClass}`);
+      if (section) {
+        section.scrollIntoView({ 
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    }
+
+    // Add click handlers for smooth navigation
+    document.querySelector('.header h1').addEventListener('click', () => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showToast('Scrolled to top', 'info');
+    });
+  </script>
 </body>
 </html>
