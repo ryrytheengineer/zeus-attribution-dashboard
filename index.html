@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Demographic Intelligence Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    /* MacBook Frame */
+    .macbook {
+      width: 100%;
+      max-width: 1400px;
+      perspective: 1000px;
+    }
+
+    .macbook-screen {
+      background: #1a1a1a;
+      border-radius: 12px;
+      padding: 24px 24px 60px 24px;
+      box-shadow: 
+        0 0 0 8px #2a2a2a,
+        0 20px 60px rgba(0, 0, 0, 0.4),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      transform: rotateX(2deg);
+    }
+
+    .macbook-screen::before {
+      content: '';
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: #666;
+      border-radius: 2px;
+    }
+
+    .macbook-base {
+      height: 20px;
+      background: linear-gradient(to bottom, #e8e8e8, #d1d1d1);
+      border-radius: 0 0 20px 20px;
+      margin-top: -10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Dashboard Content */
+    .dashboard {
+      background: #0f1115;
+      border-radius: 8px;
+      color: #ffffff;
+      height: 800px;
+      overflow-y: auto;
+      padding: 32px;
+    }
+
+    .dashboard::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .dashboard::-webkit-scrollbar-track {
+      background: #1b1e24;
+      border-radius: 3px;
+    }
+
+    .dashboard::-webkit-scrollbar-thumb {
+      background: #374151;
+      border-radius: 3px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .header h1 {
+      font-size: 28px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #ffffff, #9ca3af);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .header .date {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+
+    .metric-card {
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      border: 1px solid #374151;
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.3s ease;
+    }
+
+    .metric-card:hover {
+      border-color: #4f46e5;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(79, 70, 229, 0.1);
+    }
+
+    .metric-card h3 {
+      font-size: 12px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .metric-card .value {
+      font-size: 28px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .metric-card .change {
+      font-size: 12px;
+      color: #10b981;
+    }
+
+    .chart-section {
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      border: 1px solid #374151;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .chart-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .chart-filters {
+      display: flex;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      padding: 6px 12px;
+      border: 1px solid #374151;
+      background: transparent;
+      color: #9ca3af;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .filter-btn.active {
+      background: #4f46e5;
+      border-color: #4f46e5;
+      color: white;
+    }
+
+    .chart-placeholder {
+      height: 200px;
+      background: #0f1115;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .chart-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .data-table {
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      border: 1px solid #374151;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+
+    .table-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid #374151;
+    }
+
+    .table-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table th {
+      text-align: left;
+      padding: 16px 24px;
+      color: #9ca3af;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 500;
+      background: #111827;
+      border-bottom: 1px solid #374151;
+    }
+
+    .table td {
+      padding: 16px 24px;
+      border-bottom: 1px solid #374151;
+      font-size: 14px;
+    }
+
+    .table tr:hover {
+      background: rgba(79, 70, 229, 0.05);
+    }
+
+    .score-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 12px;
+    }
+
+    .score-high {
+      background: rgba(16, 185, 129, 0.2);
+      color: #10b981;
+    }
+
+    .score-medium {
+      background: rgba(245, 158, 11, 0.2);
+      color: #f59e0b;
+    }
+
+    .ai-assistant {
+      background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+      border: 1px solid #374151;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .ai-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .ai-avatar {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .ai-name {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .ai-badge {
+      background: rgba(99, 102, 241, 0.2);
+      color: #6366f1;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .ai-message {
+      font-size: 14px;
+      line-height: 1.6;
+      color: #e5e7eb;
+    }
+
+    .ai-typing {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      margin-left: 8px;
+    }
+
+    .typing-dot {
+      width: 4px;
+      height: 4px;
+      background: #6366f1;
+      border-radius: 50%;
+      animation: typing 1.4s infinite;
+    }
+
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+    @keyframes typing {
+      0%, 60%, 100% {
+        opacity: 0.3;
+        transform: scale(1);
+      }
+      30% {
+        opacity: 1;
+        transform: scale(1.2);
+      }
+    }
+
+    .recommendation-card {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      border-radius: 12px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .recommendation-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+      pointer-events: none;
+    }
+
+    .recommendation-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .recommendation-icon {
+      width: 24px;
+      height: 24px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .recommendation-title {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .recommendation-text {
+      font-size: 14px;
+      line-height: 1.5;
+      opacity: 0.95;
+    }
+
+    @media (max-width: 768px) {
+      .dashboard {
+        padding: 20px;
+        height: 600px;
+      }
+      
+      .metrics-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      
+      .header h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="macbook">
+    <div class="macbook-screen">
+      <div class="dashboard">
+        <div class="header">
+          <h1>Zeus Attribution Model</h1>
+          <div class="date">August 5, 2025</div>
+        </div>
+
+        <div class="ai-assistant">
+          <div class="ai-header">
+            <div class="ai-avatar">⚡</div>
+            <div>
+              <div class="ai-name">Zeus AI Assistant</div>
+              <div class="ai-badge">Attribution Intelligence</div>
+            </div>
+            <div class="ai-typing">
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+              <div class="typing-dot"></div>
+            </div>
+          </div>
+          <div class="ai-message">
+            Based on July's app cohort data, <strong>females aged 25-34</strong> are showing the highest 6-month nicotine cessation success rate at <strong>73.2%</strong>. This demographic has the strongest retention curve and lowest relapse indicators. 
+            <br><br>
+            <strong>Recommendation:</strong> 3x ad spend on Meta campaign "SF_Female_25-34_Wellness" (current spend: $1,847/day → target: $5,541/day) to maximize high-intent conversions during Q3 peak season.
+          </div>
+        </div>
+
+        <div class="recommendation-card">
+          <div class="recommendation-header">
+            <div class="recommendation-icon">🎯</div>
+            <div class="recommendation-title">Zeus Model Insights</div>
+          </div>
+          <div class="recommendation-text">
+            The Zeus Attribution Model identified cross-platform performance patterns showing 184% ROI improvement when focusing ad spend on high-performing demographics. Current optimization suggests reallocating 23% of budget from low-performing segments to maximize total conversion volume by an estimated 47%.
+          </div>
+        </div>
+
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <h3>App Installs</h3>
+            <div class="value">128,034</div>
+            <div class="change">+12.3% vs last month</div>
+          </div>
+          <div class="metric-card">
+            <h3>Ad Spend</h3>
+            <div class="value">$342,580</div>
+            <div class="change">+8.7% vs last month</div>
+          </div>
+          <div class="metric-card">
+            <h3>Orders</h3>
+            <div class="value">58,247</div>
+            <div class="change">+15.2% vs last month</div>
+          </div>
+          <div class="metric-card">
+            <h3>Conversion Rate</h3>
+            <div class="value">3.94%</div>
+            <div class="change">+0.3% vs last month</div>
+          </div>
+          <div class="metric-card">
+            <h3>Cost Per Install</h3>
+            <div class="value">$1.32</div>
+            <div class="change">-5.8% vs last month</div>
+          </div>
+          <div class="metric-card">
+            <h3>Avg CPM</h3>
+            <div class="value">$5.18</div>
+            <div class="change">+2.1% vs last month</div>
+          </div>
+        </div>
+
+        <div class="chart-section">
+          <div class="chart-header">
+            <div class="chart-title">Vaping Cessation Cohort Analysis - Quit Journey Progression</div>
+            <div class="chart-filters">
+              <button class="filter-btn active">All Cohorts</button>
+              <button class="filter-btn">6M</button>
+              <button class="filter-btn">12M</button>
+            </div>
+          </div>
+          <div class="chart-placeholder">
+            <svg class="chart-svg" viewBox="0 0 900 320">
+              <defs>
+                <linearGradient id="attemptGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#d97706;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="relapseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#ef4444;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#dc2626;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="quitGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#059669;stop-opacity:1" />
+                </linearGradient>
+              </defs>
+              
+              <!-- Y-axis labels -->
+              <text x="40" y="50" text-anchor="end" fill="#9ca3af" font-size="10">100%</text>
+              <text x="40" y="110" text-anchor="end" fill="#9ca3af" font-size="10">75%</text>
+              <text x="40" y="170" text-anchor="end" fill="#9ca3af" font-size="10">50%</text>
+              <text x="40" y="230" text-anchor="end" fill="#9ca3af" font-size="10">25%</text>
+              <text x="40" y="290" text-anchor="end" fill="#9ca3af" font-size="10">0%</text>
+              
+              <!-- Grid lines -->
+              <g stroke="#374151" stroke-width="0.5" opacity="0.3">
+                <line x1="50" y1="50" x2="850" y2="50" />
+                <line x1="50" y1="110" x2="850" y2="110" />
+                <line x1="50" y1="170" x2="850" y2="170" />
+                <line x1="50" y1="230" x2="850" y2="230" />
+                <line x1="50" y1="290" x2="850" y2="290" />
+              </g>
+              
+              <!-- Cohort bars - showing progression from early cohorts (more attempts/relapses) to recent (more successful quits) -->
+              
+              <!-- Jan 2023 - Early cohort, more attempts, high relapse -->
+              <rect x="60" y="50" width="18" height="200" fill="url(#attemptGrad)" />
+              <rect x="60" y="150" width="18" height="100" fill="url(#relapseGrad)" />
+              <rect x="60" y="240" width="18" height="30" fill="url(#quitGrad)" />
+              
+              <!-- Feb 2023 -->
+              <rect x="82" y="50" width="18" height="190" fill="url(#attemptGrad)" />
+              <rect x="82" y="145" width="18" height="95" fill="url(#relapseGrad)" />
+              <rect x="82" y="235" width="18" height="35" fill="url(#quitGrad)" />
+              
+              <!-- Mar 2023 -->
+              <rect x="104" y="50" width="18" height="180" fill="url(#attemptGrad)" />
+              <rect x="104" y="140" width="18" height="90" fill="url(#relapseGrad)" />
+              <rect x="104" y="225" width="18" height="45" fill="url(#quitGrad)" />
+              
+              <!-- Apr 2023 -->
+              <rect x="126" y="50" width="18" height="170" fill="url(#attemptGrad)" />
+              <rect x="126" y="135" width="18" height="85" fill="url(#relapseGrad)" />
+              <rect x="126" y="215" width="18" height="55" fill="url(#quitGrad)" />
+              
+              <!-- May 2023 -->
+              <rect x="148" y="50" width="18" height="160" fill="url(#attemptGrad)" />
+              <rect x="148" y="130" width="18" height="80" fill="url(#relapseGrad)" />
+              <rect x="148" y="205" width="18" height="65" fill="url(#quitGrad)" />
+              
+              <!-- Jun 2023 -->
+              <rect x="170" y="50" width="18" height="150" fill="url(#attemptGrad)" />
+              <rect x="170" y="125" width="18" height="75" fill="url(#relapseGrad)" />
+              <rect x="170" y="195" width="18" height="75" fill="url(#quitGrad)" />
+              
+              <!-- Jul 2023 -->
+              <rect x="192" y="50" width="18" height="140" fill="url(#attemptGrad)" />
+              <rect x="192" y="120" width="18" height="70" fill="url(#relapseGrad)" />
+              <rect x="192" y="185" width="18" height="85" fill="url(#quitGrad)" />
+              
+              <!-- Aug 2023 -->
+              <rect x="214" y="50" width="18" height="130" fill="url(#attemptGrad)" />
+              <rect x="214" y="115" width="18" height="65" fill="url(#relapseGrad)" />
+              <rect x="214" y="175" width="18" height="95" fill="url(#quitGrad)" />
+              
+              <!-- Sep 2023 -->
+              <rect x="236" y="50" width="18" height="120" fill="url(#attemptGrad)" />
+              <rect x="236" y="110" width="18" height="60" fill="url(#relapseGrad)" />
+              <rect x="236" y="165" width="18" height="105" fill="url(#quitGrad)" />
+              
+              <!-- Oct 2023 -->
+              <rect x="258" y="50" width="18" height="110" fill="url(#attemptGrad)" />
+              <rect x="258" y="105" width="18" height="55" fill="url(#relapseGrad)" />
+              <rect x="258" y="155" width="18" height="115" fill="url(#quitGrad)" />
+              
+              <!-- Nov 2023 -->
+              <rect x="280" y="50" width="18" height="100" fill="url(#attemptGrad)" />
+              <rect x="280" y="100" width="18" height="50" fill="url(#relapseGrad)" />
+              <rect x="280" y="145" width="18" height="125" fill="url(#quitGrad)" />
+              
+              <!-- Dec 2023 -->
+              <rect x="302" y="50" width="18" height="95" fill="url(#attemptGrad)" />
+              <rect x="302" y="95" width="18" height="48" fill="url(#relapseGrad)" />
+              <rect x="302" y="138" width="18" height="132" fill="url(#quitGrad)" />
+              
+              <!-- 2024 cohorts - showing improved success rates -->
+              <!-- Jan 2024 -->
+              <rect x="334" y="50" width="18" height="85" fill="url(#attemptGrad)" />
+              <rect x="334" y="90" width="18" height="45" fill="url(#relapseGrad)" />
+              <rect x="334" y="130" width="18" height="140" fill="url(#quitGrad)" />
+              
+              <!-- Feb 2024 -->
+              <rect x="356" y="50" width="18" height="80" fill="url(#attemptGrad)" />
+              <rect x="356" y="85" width="18" height="42" fill="url(#relapseGrad)" />
+              <rect x="356" y="122" width="18" height="148" fill="url(#quitGrad)" />
+              
+              <!-- Continue pattern through 2024 showing improving quit rates -->
+              <!-- Mar 2024 -->
+              <rect x="378" y="50" width="18" height="75" fill="url(#attemptGrad)" />
+              <rect x="378" y="80" width="18" height="40" fill="url(#relapseGrad)" />
+              <rect x="378" y="115" width="18" height="155" fill="url(#quitGrad)" />
+              
+              <!-- Skip to recent months showing best performance -->
+              <!-- May 2025 -->
+              <rect x="750" y="50" width="18" height="60" fill="url(#attemptGrad)" />
+              <rect x="750" y="65" width="18" height="30" fill="url(#relapseGrad)" />
+              <rect x="750" y="90" width="18" height="180" fill="url(#quitGrad)" />
+              
+              <!-- Jun 2025 -->
+              <rect x="772" y="50" width="18" height="55" fill="url(#attemptGrad)" />
+              <rect x="772" y="60" width="18" height="28" fill="url(#relapseGrad)" />
+              <rect x="772" y="85" width="18" height="185" fill="url(#quitGrad)" />
+              
+              <!-- Jul 2025 -->
+              <rect x="794" y="50" width="18" height="50" fill="url(#attemptGrad)" />
+              <rect x="794" y="55" width="18" height="25" fill="url(#relapseGrad)" />
+              <rect x="794" y="75" width="18" height="195" fill="url(#quitGrad)" />
+              
+              <!-- X-axis cohort labels -->
+              <text x="69" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 69 305)">Jan23</text>
+              <text x="91" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 91 305)">Feb23</text>
+              <text x="113" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 113 305)">Mar23</text>
+              <text x="135" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 135 305)">Apr23</text>
+              <text x="157" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 157 305)">May23</text>
+              <text x="179" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 179 305)">Jun23</text>
+              <text x="201" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 201 305)">Jul23</text>
+              <text x="223" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 223 305)">Aug23</text>
+              <text x="245" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 245 305)">Sep23</text>
+              <text x="267" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 267 305)">Oct23</text>
+              <text x="289" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 289 305)">Nov23</text>
+              <text x="311" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 311 305)">Dec23</text>
+              <text x="343" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 343 305)">Jan24</text>
+              <text x="365" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 365 305)">Feb24</text>
+              <text x="387" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 387 305)">Mar24</text>
+              <text x="759" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 759 305)">May25</text>
+              <text x="781" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 781 305)">Jun25</text>
+              <text x="803" y="305" text-anchor="middle" fill="#6b7280" font-size="8" transform="rotate(-45 803 305)">Jul25</text>
+              
+              <!-- 70% success line -->
+              <line x1="50" y1="140" x2="850" y2="140" stroke="#10b981" stroke-width="2" stroke-dasharray="5,5" />
+              <text x="55" y="135" fill="#10b981" font-size="10" font-weight="600">70% success rate</text>
+            </svg>
+          </div>
+          <div style="display: flex; justify-content: center; gap: 24px; margin-top: 16px; font-size: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="width: 12px; height: 12px; background: #f59e0b; border-radius: 2px;"></div>
+              <span style="color: #9ca3af;">Attempted Quit</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="width: 12px; height: 12px; background: #ef4444; border-radius: 2px;"></div>
+              <span style="color: #9ca3af;">Relapsed</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="width: 12px; height: 12px; background: #10b981; border-radius: 2px;"></div>
+              <span style="color: #9ca3af;">Successfully Quit</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-section">
+          <div class="chart-header">
+            <div class="chart-title">Cessation Timeline vs Cost Per Quit Analysis</div>
+            <div class="chart-filters">
+              <button class="filter-btn active">3M</button>
+              <button class="filter-btn">6M</button>
+              <button class="filter-btn">12M</button>
+            </div>
+          </div>
+          <div class="chart-placeholder">
+            <svg class="chart-svg" viewBox="0 0 800 300">
+              <defs>
+                <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.3" />
+                  <stop offset="100%" style="stop-color:#10b981;stop-opacity:0" />
+                </linearGradient>
+                <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#f59e0b;stop-opacity:0.3" />
+                  <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:0" />
+                </linearGradient>
+                <linearGradient id="gradient3" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#ef4444;stop-opacity:0.3" />
+                  <stop offset="100%" style="stop-color:#ef4444;stop-opacity:0" />
+                </linearGradient>
+              </defs>
+              
+              <!-- Grid lines -->
+              <g stroke="#374151" stroke-width="1" opacity="0.3">
+                <line x1="100" y1="50" x2="100" y2="250" />
+                <line x1="250" y1="50" x2="250" y2="250" />
+                <line x1="400" y1="50" x2="400" y2="250" />
+                <line x1="550" y1="50" x2="550" y2="250" />
+                <line x1="700" y1="50" x2="700" y2="250" />
+                <line x1="80" y1="75" x2="720" y2="75" />
+                <line x1="80" y1="125" x2="720" y2="125" />
+                <line x1="80" y1="175" x2="720" y2="175" />
+                <line x1="80" y1="225" x2="720" y2="225" />
+              </g>
+              
+              <!-- Bubble chart points -->
+              <!-- Females 25-34 (high success, low cost) -->
+              <circle cx="150" cy="85" r="25" fill="#10b981" opacity="0.7" />
+              <text x="150" y="90" text-anchor="middle" fill="white" font-size="10" font-weight="600">F 25-34</text>
+              
+              <!-- Males 25-34 (good success, moderate cost) -->
+              <circle cx="200" cy="110" r="22" fill="#10b981" opacity="0.6" />
+              <text x="200" y="115" text-anchor="middle" fill="white" font-size="9" font-weight="600">M 25-34</text>
+              
+              <!-- Females 18-24 (moderate success, higher cost) -->
+              <circle cx="320" cy="150" r="20" fill="#f59e0b" opacity="0.7" />
+              <text x="320" y="155" text-anchor="middle" fill="white" font-size="9" font-weight="600">F 18-24</text>
+              
+              <!-- Males 18-24 (lower success, higher cost) -->
+              <circle cx="380" cy="180" r="18" fill="#f59e0b" opacity="0.6" />
+              <text x="380" y="185" text-anchor="middle" fill="white" font-size="8" font-weight="600">M 18-24</text>
+              
+              <!-- Females 35-44 (slower timeline, moderate cost) -->
+              <circle cx="500" cy="140" r="16" fill="#ef4444" opacity="0.6" />
+              <text x="500" y="145" text-anchor="middle" fill="white" font-size="8" font-weight="600">F 35-44</text>
+              
+              <!-- Males 35-44 (slowest timeline, highest cost) -->
+              <circle cx="580" cy="200" r="15" fill="#ef4444" opacity="0.7" />
+              <text x="580" y="205" text-anchor="middle" fill="white" font-size="8" font-weight="600">M 35-44</text>
+              
+              <!-- Axes labels -->
+              <text x="400" y="285" text-anchor="middle" fill="#9ca3af" font-size="12">Average Days to Quit</text>
+              <text x="30" y="150" text-anchor="middle" fill="#9ca3af" font-size="12" transform="rotate(-90 30 150)">Cost Per Quit ($)</text>
+              
+              <!-- Scale indicators -->
+              <text x="100" y="275" text-anchor="middle" fill="#6b7280" font-size="10">30</text>
+              <text x="250" y="275" text-anchor="middle" fill="#6b7280" font-size="10">60</text>
+              <text x="400" y="275" text-anchor="middle" fill="#6b7280" font-size="10">90</text>
+              <text x="550" y="275" text-anchor="middle" fill="#6b7280" font-size="10">120</text>
+              <text x="700" y="275" text-anchor="middle" fill="#6b7280" font-size="10">150</text>
+              
+              <text x="70" y="230" text-anchor="end" fill="#6b7280" font-size="10">$50</text>
+              <text x="70" y="180" text-anchor="end" fill="#6b7280" font-size="10">$100</text>
+              <text x="70" y="130" text-anchor="end" fill="#6b7280" font-size="10">$150</text>
+              <text x="70" y="80" text-anchor="end" fill="#6b7280" font-size="10">$200</text>
+            </svg>
+          </div>
+          <div style="display: flex; justify-content: center; gap: 24px; margin-top: 16px; font-size: 12px;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="width: 12px; height: 12px; background: #10b981; border-radius: 50%;"></div>
+              <span style="color: #9ca3af;">High Success (70%+ quit rate)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="width: 12px; height: 12px; background: #f59e0b; border-radius: 50%;"></div>
+              <span style="color: #9ca3af;">Moderate Success (50-70% quit rate)</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <div style="width: 12px; height: 12px; background: #ef4444; border-radius: 50%;"></div>
+              <span style="color: #9ca3af;">Lower Success (<50% quit rate)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="chart-section">
+          <div class="chart-header">
+            <div class="chart-title">Performance by Demographic</div>
+            <div class="chart-filters">
+              <button class="filter-btn active">7D</button>
+              <button class="filter-btn">30D</button>
+              <button class="filter-btn">90D</button>
+            </div>
+          </div>
+          <div class="chart-placeholder">
+            <svg class="chart-svg" viewBox="0 0 800 200">
+              <defs>
+                <linearGradient id="gradient1" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:0.3" />
+                  <stop offset="100%" style="stop-color:#4f46e5;stop-opacity:0" />
+                </linearGradient>
+                <linearGradient id="gradient2" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" style="stop-color:#10b981;stop-opacity:0.3" />
+                  <stop offset="100%" style="stop-color:#10b981;stop-opacity:0" />
+                </linearGradient>
+              </defs>
+              <!-- Area fills -->
+              <path d="M50,150 Q200,120 350,100 T650,80 L650,180 L50,180 Z" fill="url(#gradient1)" />
+              <path d="M50,170 Q200,140 350,130 T650,110 L650,180 L50,180 Z" fill="url(#gradient2)" />
+              <!-- Lines -->
+              <path d="M50,150 Q200,120 350,100 T650,80" stroke="#4f46e5" stroke-width="3" fill="none" />
+              <path d="M50,170 Q200,140 350,130 T650,110" stroke="#10b981" stroke-width="3" fill="none" />
+              <!-- Data points -->
+              <circle cx="50" cy="150" r="4" fill="#4f46e5" />
+              <circle cx="200" cy="120" r="4" fill="#4f46e5" />
+              <circle cx="350" cy="100" r="4" fill="#4f46e5" />
+              <circle cx="500" cy="90" r="4" fill="#4f46e5" />
+              <circle cx="650" cy="80" r="4" fill="#4f46e5" />
+              <circle cx="50" cy="170" r="4" fill="#10b981" />
+              <circle cx="200" cy="140" r="4" fill="#10b981" />
+              <circle cx="350" cy="130" r="4" fill="#10b981" />
+              <circle cx="500" cy="120" r="4" fill="#10b981" />
+              <circle cx="650" cy="110" r="4" fill="#10b981" />
+            </svg>
+          </div>
+        </div>
+
+        <div class="data-table">
+          <div class="table-header">
+            <div class="table-title">Demographic Performance Analysis</div>
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Demographic</th>
+                <th>Cost Per Demo</th>
+                <th>Conversion Rate</th>
+                <th>Performance Score</th>
+                <th>ROI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Females 25–34</td>
+                <td>$1.18</td>
+                <td>4.2%</td>
+                <td><span class="score-badge score-high">9.4</span></td>
+                <td>+184%</td>
+              </tr>
+              <tr>
+                <td>Males 25–34</td>
+                <td>$1.26</td>
+                <td>3.8%</td>
+                <td><span class="score-badge score-high">8.9</span></td>
+                <td>+167%</td>
+              </tr>
+              <tr>
+                <td>Females 18–24</td>
+                <td>$1.58</td>
+                <td>3.1%</td>
+                <td><span class="score-badge score-medium">7.8</span></td>
+                <td>+142%</td>
+              </tr>
+              <tr>
+                <td>Males 18–24</td>
+                <td>$1.74</td>
+                <td>2.9%</td>
+                <td><span class="score-badge score-medium">7.2</span></td>
+                <td>+128%</td>
+              </tr>
+              <tr>
+                <td>Females 35–44</td>
+                <td>$1.92</td>
+                <td>2.4%</td>
+                <td><span class="score-badge score-medium">6.5</span></td>
+                <td>+103%</td>
+              </tr>
+              <tr>
+                <td>Males 35–44</td>
+                <td>$2.14</td>
+                <td>2.1%</td>
+                <td><span class="score-badge score-medium">5.8</span></td>
+                <td>+89%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="macbook-base"></div>
+  </div>
+</body>
+</html>
