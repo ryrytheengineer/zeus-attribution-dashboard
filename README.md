@@ -19,7 +19,9 @@ A sophisticated demographic intelligence dashboard for analyzing vaping cessatio
 
 ## Live Demo
 
-Visit the live dashboard: [Coming Soon - Will be deployed on Vercel]
+🚀 **Visit the live dashboard**: [https://ryrytheengineer.github.io/zeus-attribution-dashboard](https://ryrytheengineer.github.io/zeus-attribution-dashboard)
+
+*Dashboard is deployed automatically via GitHub Pages. Updates deploy within minutes of pushing to main branch.*
 
 ## Getting Started
 
